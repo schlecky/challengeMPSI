@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block contenu %}
+<select id="classeSelect" onchange="selectionChanged()">
+  {% for c in classes %}
+  <option>{{ c.nom }}</option>
+  {% endfor %}
+</select>
+
+
+{% for c in classes %}
+<div id="{{ c.nom|cut:" " }}" class="listeEleves">
+  <table class="admin_classement">
+    <thead>
+      <tr>
+        <td>Rang</td><td>Nom</td><td>Score</td>
+      </tr>
+    </thead>
+    {% for j in c.classement %}
+    <tr>
+      <td><span class="classement">{{ forloop.counter }}</span></td><td><a href=/profile/{{ j.id }}/>{{ j.first_name }} <span class="init">{{ j.last_name_init }}</span></a></td><td><span class="badge">{{ j.score }}</span></td>
+    </tr>
+
+    {% endfor %}
+  </table>
+</div>
+{% endfor %}
+<script>
+  $(".listeEleves").hide();
+  function selectionChanged(){
+    classe = $('#classeSelect').val().replace(/\s+/g, '');
+    $(".listeEleves").hide();
+    $("#"+classe).show();
+  }
+</script>
+{% endblock %}
+
+{% block classement %}
+{% endblock %}

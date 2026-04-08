@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<title>Challenge MPSI</title>
+<head>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.min.css' %}" />
+  {% comment %}<link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/solid.min.css' %}" />{% endcomment %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+  <link rel="icon" type="image/png" href="{% static 'img/icones/logo.png' %}">
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+</head>
+
+<body>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+classement = false;
+function toggle_classement(){
+  classement = !classement;
+  if(classement == true){
+    $("#classement").addClass("visible");
+  } else {
+    $("#classement").removeClass("visible");
+  }
+}
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<header>
+  <h1> <a href={% url 'accueil'%}><img class="logo" src="{% static 'img/icones/logo.png' %}"></img><span id=titre>Challenge MPSI</span><span id="physchim">Physique-Chimie</span></a></h1>
+  <div id='user_div'>
+    {% if user.is_authenticated %}
+    <div class="tooltip" id="user_nom">
+      <a href=/profile/{{ user.etudiant.id }}><i class="fa fa-user" aria-hidden="true"></i>{{ user.first_name }} {{ user.last_name }}</a>
+      <div class="tooltiptext">
+        <span>Voir le profil de {{ user.first_name }}</span>
+      </div>
+    </div>
+
+    <div class="tooltip" id="logout_icon">
+    <a href={% url 'logout' %}><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+      <div class="tooltiptext">
+        <span>Déconnexion</span>
+      </div>
+    </div>
+    <div id=score onclick="toggle_classement()" class="tooltip">
+      <span id=etoiles>{{ stats.score }}<i class="fa fa-star"></i></span><span id=rang>{{ stats.rang }}<i class="fa fa-ranking-star" aria-hidden="true"></i></span>
+      <div class="tooltiptext">
+        <span>Classement</span>
+      </div>
+    </div>
+    {% else %}
+    <a href={% url 'login' %}>Se connecter<i class="fa fa-sign-in" aria-hidden="true"></i></a>
+    {% endif %}
+  </div>
+</header>
+
+<section id='contenu'>
+{% block contenu %}
+{% endblock %}
+</section>
+
+{% block classement %}
+<aside id='classement'>
+  <div id="close_classement" onclick='toggle_classement()'>
+    <i class="fa-solid fa-caret-right"></i>
+  </div>
+{% if user.is_authenticated%}
+<table>
+  <thead>
+    <tr>
+      <td>Rang</td><td>Nom</td><td>Score</td>
+    </tr>
+  </thead>
+  {% for j in stats.liste %}
+  <tr>
+    <td><span class="classement">{{ forloop.counter }}</span></td><td><a href=/profile/{{ j.id }}/>{{ j.first_name }} <span class="init">{{ j.last_name_init }}</span></a></td><td><span class="badge">{{ j.score }}</span></td>
+</tr>
+
+{% endfor %}
+</table>
+{% endif %}
+</aside>
+{% endblock %}
+
+<script>
+</script>
+
+<footer>
+  <div id=notification>
+  </div>
+</footer>
+</body>
+</html>

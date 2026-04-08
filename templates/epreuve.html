@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block contenu %}
+<script>
+  data = {{ data|safe }}
+  id_epreuve={{ epreuve.id }}
+  etoiles = {{ epreuve.etoiles }}
+
+  $(document).ready(function(){
+    // Select all elements whose class attribute matches the regex
+    var regex = /^data-/; 
+    var elements = $("[id]").filter(function() {
+        return regex.test($(this).attr("id"));
+    });
+    elements.each(function() {
+        $(this).text(data[this.id].toLocaleString(undefined,
+ {'minimumFractionDigits':0,'maximumFractionDigits':6}));
+    });
+
+    $('.message').hide()
+
+
+    $('form').submit(function(event){
+        rep = $('#reponse').val()
+        console.log(rep)
+        timeout = setTimeout(requeteTimeout, 4000)
+        checkReponse(id_epreuve, rep)
+        event.preventDefault()
+      })
+  });
+
+  function delete_message(){
+    $('.message').hide()
+  }
+
+  function epreuveReussie(){
+    $("#messageOK").show();
+  }
+  function epreuveEchouee(){
+    $("#messageKO").show()
+  }
+  function requeteTimeout(){
+    $('#spinner').hide();
+    $('#messageError').show();
+    $('#verif_message').hide()
+  }
+  function checkReponse(n_epreuve, reponse){
+      delete_message();
+      $('#verif_message').show()
+      $('#echec').remove()
+      $.ajax({
+        url:"/check_epreuve/"+String(n_epreuve)+"/",
+          data:'reponse='+encodeURIComponent(reponse)+'&csrfmiddlewaretoken='+$('form>input').val(),
+        method:'POST',
+        }).done(function(data){
+            clearTimeout(timeout)
+            $('#verif_message').hide()
+            if(data.resultat==1){
+              //if(data.hasOwnProperty("redirect")){
+              //  window.location = data.redirect;
+              //  console.log("redirection");
+              //}
+              epreuveReussie()
+            } else {
+              epreuveEchouee()
+            }
+          })
+      event.preventDefault();
+  }
+
+
+  $(document).ready(function(){
+  })
+</script>
+<section class="section_epreuve">
+  <h1><a href=/domaine/{{ epreuve.domaine.id }}>{{ epreuve.domaine }}</a></h1>
+  <h2>{{ epreuve.titre }} {% if valide %}<i class="fa-solid fa-check"></i>{% else %}<i class="fa-solid fa-xmark"></i>{% endif %}</h2>
+
+{{ epreuve.enonce|safe }}
+
+<form>
+  {% csrf_token %}
+  <label>Réponse</label>
+  <input type="text" placeholder="3.145" name="reponse" id="reponse" required>
+  <input type="submit" value="Envoyer"/><span id=verif_message><i class="fas fa-spinner fa-spin"></i>Vérification de la solution</span><span id=echec><i class="fa-solid fa-triangle-exclamation"></i>Échec de la requête</span>
+</form>
+
+<div id='messageKO' class='message'>
+<i class="fa-solid fa-xmark"></i><span><strong>Mauvaise réponse, retente ta chance !</strong></span>
+</div>
+<div id='messageOK' class='message'>
+<i class="fa-solid fa-check"></i><span><strong>Bien joué !</strong></span>
+</div>
+<div id='messageError' class='message'>
+<i class="fa-solid fa-xmark"></i><span><strong>Echec de la requête</strong></span>
+</div>
+
+{% if valide %}
+<h2>Solution</h2>
+{{ epreuve.solution|safe }}
+{% endif %}
+</section>
+
+{% endblock %}
+

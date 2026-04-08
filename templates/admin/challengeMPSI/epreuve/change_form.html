@@ -1,0 +1,85 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style type="text/css" media="screen">
+#editorData, #editorTest, #editorEnonce, #editorSolution {
+  height:275px;
+  width:630px;
+  border:#CCC solid 1px;
+  margin:20px;
+  border-radius:5px;
+  font-size:14px;
+}
+</style>
+{% endblock %}
+
+
+
+{% block after_field_sets %}
+
+<script src="/static/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var divEditorEnonce = document.createElement('div');
+    divEditorEnonce.id="editorEnonce";
+    var textareaEnonce = document.getElementById("id_enonce");
+    textareaEnonce.parentNode.insertBefore(divEditorEnonce,textareaEnonce.nextSibling);
+    textareaEnonce.style = "display: none"
+    var editorEnonce = ace.edit("editorEnonce");
+
+    editorEnonce.setTheme("ace/theme/clouds");
+    editorEnonce.getSession().setMode("ace/mode/html");
+    editorEnonce.session.setUseWrapMode(true);
+    editorEnonce.setValue(textareaEnonce.value);
+    editorEnonce.clearSelection();
+
+    var divEditorData = document.createElement('div');
+    divEditorData.id="editorData";
+    var textareaData = document.getElementById("id_dataFunc");
+    textareaData.parentNode.insertBefore(divEditorData,textareaData.nextSibling);
+    textareaData.style = "display: none"
+    var editorData = ace.edit("editorData");
+
+    editorData.setTheme("ace/theme/clouds");
+    editorData.getSession().setMode("ace/mode/python");
+    editorData.session.setUseWrapMode(true);
+    editorData.setValue(textareaData.value);
+    editorData.clearSelection();
+
+
+    var divEditorTest = document.createElement('div');
+    divEditorTest.id="editorTest";
+    var textareaTest = document.getElementById("id_testFunc");
+    textareaTest.parentNode.insertBefore(divEditorTest,textareaTest.nextSibling);
+    textareaTest.style = "display: none"
+    var editorTest = ace.edit("editorTest");
+
+    editorTest.setTheme("ace/theme/clouds");
+    editorTest.getSession().setMode("ace/mode/python");
+    editorTest.session.setUseWrapMode(true);
+    editorTest.setValue(textareaTest.value);
+    editorTest.clearSelection();
+
+    var divEditorSolution = document.createElement('div');
+    divEditorSolution.id="editorSolution";
+    var textareaSolution = document.getElementById("id_solution");
+    textareaSolution.parentNode.insertBefore(divEditorSolution,textareaSolution.nextSibling);
+    textareaSolution.style = "display: none"
+    var editorSolution = ace.edit("editorSolution");
+
+    editorSolution.setTheme("ace/theme/clouds");
+    editorSolution.getSession().setMode("ace/mode/html");
+    editorSolution.session.setUseWrapMode(true);
+    editorSolution.setValue(textareaSolution.value);
+    editorSolution.clearSelection();
+    function copyCode(){
+      textareaData.value = editorData.getSession().getValue();
+      textareaTest.value = editorTest.getSession().getValue();
+      textareaEnonce.value = editorEnonce.getSession().getValue();
+      textareaSolution.value = editorSolution.getSession().getValue();
+    }
+
+    form = document.getElementById("epreuve_form");
+    form.setAttribute("onsubmit","copyCode()");
+</script>
+{% endblock %}

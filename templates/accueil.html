@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block contenu %}
+
+<div id="intro">
+<p>Vous trouverez sur ce site un ensemble d'épreuves à réaliser dans les différents domaines du programme de physique-chimie de MPSI.</p>
+
+<p>L'utilisation de ce site et les résultats obtenus ne seront jamais utilisés pour vous évaluer ou vous juger, vous êtes libres de l'utiliser (ou pas) comme bon vous semble.</p>
+
+<p>Lorsque vous réussissez des épreuves, <strong>vous ne devez pas en divulguer la solution</strong> à qui que ce soit (ça ne rendrait service à personne). Par contre vous êtes fortement encouragés à aider ceux qui en auraient besoin en leur <strong>donnant des indications</strong>. Vous pouvez expliquer à quelqu'un comment vous avez fait, mais vous ne devez pas lui donner la réponse !</p>
+
+<p>Si vous êtes confiant dans votre solution mais qu'elle ne permet pas de valider l'épreuve, n'hésitez pas à venir me voir, il n'est pas exclu qu'il reste quelques bugs.</p>
+
+<p>Toutes les réponses doivent comporter au minimum <strong>4 chiffres significatifs</strong>.</p>
+
+<p>Bonne chance !</p>
+</div>
+
+<ul class="liste_domaines">
+{% for d in listeDomaines %}
+<li class="domaine" onclick="document.location='domaine/{{ d.domaine.id }}/'">
+  <h1>{{ d.domaine.nom_affiche|safe}}</h1> 
+  <img src=static/img/icones/{{ d.domaine.image }} class=icone_domaine></img>
+  <div id=description_domaine>
+    <ul>
+    {% for c in d.chapitres %}
+    <li>{{ c.nom }}</li>
+    {% endfor %}
+    </ul>
+  </div>
+</li>
+{% endfor %}
+</ul>
+
+<div id="historique">
+  <h2>Validations récentes</h2>
+  <table>
+    <thead>
+      <tr><td>Date</td><td>Heure</td><td>Nom</td><td>Épreuve</td></tr>
+    </thead>
+  {% for e in evenements %}
+  <tr><td>{{ e.date }}</td> <td>{{ e.time }}</td> <td><a href="/profile/{{ e.etudiantId }}">{{ e.nom }}</a></td><td><a href=/epreuve/{{ e.epreuveId }}>{{ e.epreuve}}</a></td> </tr> 
+  {% endfor %}
+  </table>
+</div>
+
+{% if user.is_staff %}
+<a href="/administration">Administration</a>
+{% endif %}
+
+{% endblock %}

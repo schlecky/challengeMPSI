@@ -1,0 +1,128 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block contenu %}
+<script>
+  function scrollToTop(){
+    $(".nom_profil")[0].scrollIntoView({behavior:"smooth"});
+  }
+
+  function describeArc(radius, startAngle, endAngle) {
+    // Helper function, used to convert the (startAngle, endAngle) arc
+    // dexcription into cartesian coordinates that are used for the
+    // SVG arc descriptor.
+    function polarToCartesian(radius, angle) {
+        return {
+            x: radius * Math.cos(angle),
+            y: radius * Math.sin(angle),
+        };
+    }
+
+    // Generate cartesian coordinates for the start and end of the arc.
+    var start = polarToCartesian(radius, endAngle);
+    var end = polarToCartesian(radius, startAngle);
+
+    // Determine if we're drawing an arc that's larger than a 1/2 circle.
+    var largeArcFlag = endAngle - startAngle <= Math.PI ? 0 : 1;
+
+    // Generate the SVG arc descriptor.
+    var d = [
+        'M', start.x, start.y,
+        'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y
+    ].join(' ');
+
+    return d;
+  }
+
+  function drawGauge(elem, pourcent){
+    arc = pourcent*2*Math.PI/100;
+    let pathElement = document.getElementById(elem);
+    pathElement.setAttribute('d', describeArc(50, 0, arc)); 
+    if(pourcent < 30){
+      pathElement.style.stroke="red";
+    } else if(pourcent<60){
+      pathElement.style.stroke="orange";
+    } else if(pourcent<80){
+      pathElement.style.stroke="#f7f300";
+    } else {
+      pathElement.style.stroke="green";
+    }
+  }
+</script>
+
+
+<h1 class="nom_profil">{{ etudiant.user.first_name }} {{ etudiant.user.last_name }}</h1>
+
+<div id=profile_score>Score total : <span id=profile_score_val>{{statsVu.score}}</span></div>
+<div id=profile_classement>Classement : <span id=profile_classement_val>{{statsVu.rang}}/{{stats.liste|length }}</span></div>
+
+<div id=profile_container>
+<div id="profile_domaines">
+<script>
+  let listeDomaines = {};
+  let listeTables = {};
+</script>
+{% for d in statsVu.domaines %}
+<div class="score_domaine" id="score_domaine_{{d.domaine.nom}}" onclick="showListe('{{d.domaine.nom}}')" >
+  <h2 lang="fr">{{ d.domaine.nom_affiche|safe}}</h2> 
+  <div class="gauge" >
+    <svg id="gauge-{{d.domaine.nom}}" viewBox="-55 -55 110 110" >
+      <path id="arc-{{d.domaine.nom}}" transform="rotate(90)" stroke-linecap="round" />
+    </svg>
+    <img src={% static 'img/icones/' %}{{ d.domaine.image }} class="icone_domaine"></img>
+  </div>
+  <div class='pc'>{{d.pourcent}} %</div>
+</div>
+<script> 
+  drawGauge("arc-{{d.domaine.nom}}", {{d.pourcent}})
+  listeDomaines["{{d.domaine.nom}}"] = $("#score_domaine_{{d.domaine.nom}}")
+</script>
+{% endfor %}
+</div>
+
+{% for key,value in epreuves.items %}
+<div id="profile_liste_{{ key }}" class="profile_liste">
+  <div class="fermerEpreuvesProfile">
+    <a onclick="hideListes();">Fermer <i class="fas fa-circle-xmark"></i></a>
+  </div>
+  {% for d in value %}
+  <h2>{{ d.chapitre.nom }}</h2>
+  <table>
+    <thead><tr><td>Résultat</td><td>Titre</td><td>Points</td></tr></thead>
+    {% for e in d.epreuves %}
+    <tr>
+      <td class="resultat">{% if e.reussi %} <i class="fa-solid fa-check"></i> {% else %} <i class="fa-solid fa-xmark"></i> {% endif %}</td>
+      <td><a class="epreuve" href="/epreuve/{{ e.id }}/">{{ e.titre }}</a></td>
+      <td class="liste_pts">{{ e.etoiles }}<i class="fa fa-star smaller"></i></td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endfor %}
+</div>
+<script>
+  listeTables["{{key}}"] = $("#profile_liste_{{ key }}")
+</script>
+{% endfor %}
+</div>
+
+<script>
+  function hideListes(){
+    $.each(listeTables, function(k,v){
+      v.hide()
+    });
+    $.each(listeDomaines, function(k,v){
+      v.removeClass("active");
+    });
+  }
+
+  function showListe(nom){
+    hideListes();
+    listeDomaines[nom].addClass("active");
+    listeTables[nom].show();
+    //listeTables[nom][0].scrollIntoView({behavior:"smooth"});
+  }
+</script>
+
+
+{% endblock %}
