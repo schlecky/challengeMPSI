@@ -1,3 +1,7 @@
 db.sqlite3
 tags
 *.log
+*.out
+*.aux
+*.synctex.gz
+*.fdb_latexmk
