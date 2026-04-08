@@ -1,0 +1,12 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture} 
+  \draw (0,0) coordinate (O) to[V=$e(t)$ ] ++(0, 2)
+  to[C=$C$] ++(2,0) coordinate(A) 
+  to[L, l_=$L$] ++(2, 0) coordinate(B)
+  (A) to[short] ++ (0,1) to[I<=$i(t)$] ++(2,0) to[short](B)
+  to[short] ++(0, -2) to[R=$R$, i=$i_R(t)$ ] ++(-4, -0);
+\end{tikzpicture}
+\end{document}

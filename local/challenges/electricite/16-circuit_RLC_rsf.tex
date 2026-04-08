@@ -1,0 +1,12 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture} 
+  \draw (0,0) to[C=$C$, v=$u_C(t)$ ] (2,0)
+  to[R=$R$, i=$i(t)$ ]  (2, -2)
+  to[L=$L$] (0, -2)
+  ;
+  \draw[-latex] (0, -1.9) -- (0, -0.1) node[midway, left]{$u(t)$}; 
+\end{tikzpicture}
+\end{document}

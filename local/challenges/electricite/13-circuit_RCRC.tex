@@ -1,0 +1,16 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture}[baseline=2cm] 
+\draw (-2,0) to[V=$E$] (-2,2)
+to[nos=$K$](0,2) 
+to[R=$R_1$] (2,2) coordinate (A) 
+to[C=$C_1$, v=$v(t)$ ] (2,0) 
+to[short] (-2,0)
+(A) to[R=$R_2$ ] (5,2)
+to[C=$C_2$, v=$u(t)$] (5, 0)
+to[short] (2,0)
+;
+\end{tikzpicture}
+\end{document}

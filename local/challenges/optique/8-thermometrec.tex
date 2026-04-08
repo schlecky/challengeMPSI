@@ -1,0 +1,38 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+  \begin{tikzpicture}    
+    \draw[fill = gray!10] (0, 0) circle (2cm);
+    \draw (0,0) circle (3cm);
+    \draw (9, 0) to[out=180, in=-45] ++(-0.5, 0.3) coordinate (A) -- ++(135:0.3);
+    \draw (9, 0) to[out=180, in=45] ++(-0.5, -0.3) coordinate (B) -- ++(-135:0.3);
+    \draw (A) to[bend right](B);
+    \coordinate (C) at ({acos(3/9)}:3);
+    \coordinate (Ca1) at ({acos(3/9)}:3.2);
+    \coordinate (Ca2) at ($(Ca1) + ({acos(3/9)-90}:0.2)$);
+    \coordinate (Ca3) at ($(C) + ({acos(3/9)-90}:0.2)$);
+    \coordinate (D) at (-{acos(3/9)}:3);
+    \coordinate (C1) at ({acos(3/9)+acos(2/3)}:2);
+    \coordinate (C1a1) at ({acos(3/9)+acos(2/3)}:1.8);
+    \coordinate (C1a2) at ($(C1a1) + ({acos(3/9)+acos(2/3)-90}:0.2)$);
+    \coordinate (C1a3) at ($(C1) + ({acos(3/9)+acos(2/3)-90}:0.2)$);
+    \coordinate (D1) at ({-acos(3/9)-acos(2/3)}:2);
+    \coordinate(E) at (8.6, 0);
+    \draw (C1a1) -- (C1a2) -- (C1a3);
+    \draw (Ca1) -- (Ca2) -- (Ca3);
+    \draw[rayon, red, thick](C) -- (E);
+    \draw[rayon, red, thick](D) -- (E);
+    \draw[rayon, red, thick](C1) -- (C);
+    \draw[rayon, red, thick](D1) -- (D);
+    \draw[dashed] (0,0) -- (C) -- ++({acos(3/9)}:0.5);
+    \draw[dashed] (0,0) -- (C1);
+    \draw[dashed] (0,0) -- (D) -- ++({-acos(3/9)}:0.5);
+    \draw[dashed] (0,0) -- (D1);
+    \draw (C) ++ ({acos(3/9)}:-0.5) arc ({-180+acos(3/9)}:{-180+acos(3/9)-asin(2/3)}:0.5) node[midway, below left]{$i$} ;  
+    \draw[fill=black] ($(A)!0.5!(B)$)++ (-0.03, 0) circle(0.05 and 0.1);
+    \draw[<->] (0,0) -- (135:3) node[midway, fill=gray!10]{$R$}; 
+    \draw[<->] (0,0) -- (-135:2) node[midway, fill=gray!10]{$r$}; 
+    \draw (2.5, 0) node{$n$}; 
+  \end{tikzpicture}
+\end{document}

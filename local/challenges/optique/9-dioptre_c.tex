@@ -1,0 +1,72 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\usepackage{tikz-3dplot} 
+\usepackage{mathrsfs}
+\begin{document}
+
+\tdplotsetmaincoords{60}{110}
+\tdplotsetmaincoords{50}{20}
+\begin{tikzpicture}[scale=1,tdplot_main_coords]
+%
+\pgfmathsetmacro{\rvec}{3}
+\pgfmathsetmacro{\thetavec}{30}
+\pgfmathsetmacro{\phivec}{30}
+\pgfmathsetmacro{\dpl}{\rvec*cos(\thetavec)}
+\pgfmathsetmacro{\rpl}{\rvec*sin(\thetavec)}
+\def\lpl{3}
+%
+\coordinate (O) at (0,0,0);
+
+
+
+\tdplotsetrotatedcoords{0}{0}{0}
+\foreach \vtheta in {90, 105, ..., 150}{
+  \tdplotsetrotatedcoordsorigin{(0,0,{\rvec*(1-cos(\vtheta))})}
+  \draw[thin, gray!50] ({\rvec*sin(\vtheta)},0,{\rvec*cos(\vtheta)}) arc (0:360:{\rvec*sin(\vtheta)});
+}
+
+\foreach \vtheta in {150, 165, ..., 180}{
+  \tdplotsetrotatedcoordsorigin{(0,0,{\rvec*(1-cos(\vtheta))})}
+  \draw[thin, blue!50] ({\rvec*sin(\vtheta)},0,{\rvec*cos(\vtheta)}) arc (0:360:{\rvec*sin(\vtheta)});
+}
+
+\draw[thick, blue] (0, 0, -\dpl) circle(\rpl); 
+
+
+\foreach \vphi in {0, 15, ..., 360}{
+  \tdplotsetthetaplanecoords{\vphi}
+  \draw[thin, gray!50,tdplot_rotated_coords] (90:\rvec) arc (90:{180-\thetavec}:\rvec);
+}
+
+\foreach \vphi in {0, 15, ..., 360}{
+  \tdplotsetthetaplanecoords{\vphi}
+  \draw[thin, blue!50,tdplot_rotated_coords] ({180-\thetavec}:\rvec) arc ({180-\thetavec}:180:\rvec);
+}
+
+\draw[thick, gray] (O) circle(\rvec); 
+
+\tdplotsetthetaplanecoords{0}
+%\draw[-latex,tdplot_rotated_coords] (O) -- ++(1, 0,0) node[right]{$x'$}; 
+%\draw[-latex,tdplot_rotated_coords] (O) -- ++(0, 1,0) node[right]{$y'$}; 
+%\draw[-latex,tdplot_rotated_coords] (O) -- ++(0, 0,1) node[right]{$z'$}; 
+\draw[tdplot_rotated_coords](O) -- (-\dpl, \rpl);
+\draw[dashed, tdplot_rotated_coords](O) -- (-\dpl, 0);
+\draw[tdplot_rotated_coords](180:0.8) arc (180:180-\thetavec:0.8) node[midway, below]{$\alpha_l$} ;
+
+\draw (\lpl, \lpl, -\dpl) --  (-\lpl, \lpl, -\dpl) -- (-\lpl, -\lpl, -\dpl)-- node[sloped, above]{dioptre}(\lpl, -\lpl, -\dpl) -- cycle; 
+%\draw[-latex] (O) -- ++(1, 0,0) node[right]{$x$}; 
+%\draw[-latex] (O) -- ++(0, 1,0) node[right]{$y$}; 
+%\draw[-latex] (O) -- ++(0, 0,1) node[right]{$z$}; 
+
+
+\fill (O) circle(1pt);
+\draw (O) node[above]{$S$};
+\draw (0,0, -\dpl) node[below]{$(\mathscr{C})$}; 
+
+% Point M
+\tdplotsetcoord{M}{\rvec}{\thetavec}{\phivec}
+
+
+\end{tikzpicture}
+\end{document}

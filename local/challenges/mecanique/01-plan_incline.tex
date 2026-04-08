@@ -1,0 +1,14 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture} 
+  \draw[-latex] (0,0) coordinate (O) node[below left]{$O$}  -- ++(5,0) node[right]{$x$} ;
+  \draw[-latex] (O) -- ++(0, 3) node[left]{$y$};
+  \draw[thick] (O) -- ++(20:5);
+  \draw[thick, -latex] (O) -- ++(45:2) node[right]{$\vv*{v}{0}$};
+  \draw (1, 0) arc(0:20:1) node[midway, right]{$\alpha$}; 
+  \draw[-latex] (3, 3) -- ++(0, -1) node[midway, right]{$\vv{g}$}; 
+
+\end{tikzpicture}
+\end{document}

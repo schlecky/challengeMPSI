@@ -1,0 +1,21 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+  \begin{tikzpicture}    
+    \fill[gray!10] (-5, 0) rectangle (4, -1);
+    \draw (-5, 0) -- (-4, 0) node[above]{air ($n=1$) } node[below]{liquide ($n_1$) } -- (4, 0);
+    \coordinate (A) at (-3,-0.2);
+    \coordinate (B) at (3,-0.2);
+    \coordinate (C) at ($(B)+(135:2)$);
+    \coordinate (D) at ($(A)+(45:2)$);
+    \draw[fill=gray!30] (A) -- (B) -- (C) -- (D) -- cycle;
+    \draw (A) ++(0.5, 0) arc(0:45:0.5) node[midway,right]{$\theta$}; 
+    \draw (B) ++(-0.5, 0) arc(180:135:0.5) node[midway,left]{$\theta$}; 
+    \draw[thick, rayon] (-4, 1) -- (-1.8, 1) coordinate(I);
+    \draw[thick, rayon] (I) -- (1, -0.2) coordinate (J);
+    \draw[thick, rayon] (J) -- (2.4, 0.4) coordinate (K);
+    \draw[thick, rayon] (K) -- ++(1.4, 0);
+    \draw (0, 1) node[]{prisme ($n_2$)}; 
+  \end{tikzpicture}
+\end{document}

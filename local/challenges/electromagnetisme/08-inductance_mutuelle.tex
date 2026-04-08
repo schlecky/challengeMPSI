@@ -1,0 +1,19 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture} 
+  \draw (0,0) to[V=$e_0$] ++(0, 2) 
+  to[R=$R$, v=$u_1(t)$] ++(3,0) 
+  to[L=$L_1$] ++(0, -2)
+  to[short](0,0);
+
+\draw (6, 0) to[short] ++(-1,0) 
+  to[L=$L_2$] ++(0, 2)
+  to[short] ++(1,0);
+
+\draw[latex-latex] (3.5, 1.5) to[bend left] (4.5, 1.5);
+\draw (4, 1.7) node[above]{$M$} ;
+\draw[-latex] (6, 0.2) -- (6, 1.8) node[midway, right]{$u_2(t)$}; 
+\end{tikzpicture}
+\end{document}

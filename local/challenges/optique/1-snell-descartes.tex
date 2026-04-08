@@ -1,0 +1,20 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+  \begin{tikzpicture}    
+    %tikz optique
+    \draw (0,0) -- (4,0) node[above] {$n_1$} node[below] {$n_2$};
+    \draw[rayon] (0,2) -- (2,0); 
+    \draw[rayon,dashed] (2,0) -- (4,2);
+    \draw[rayon] (2,0) -- (3,-2);
+    \draw[dotted] (2,-2) -- (2,2);
+
+    \draw (2,0.5) arc (90:135:0.5) node[midway, above] {$i_1$};
+
+    \draw (2,0.7) arc (90:45:0.7) node[midway, above] {$r$};
+
+    \draw (2,-0.5) arc (-90:{-90+atan(1/2)}:0.5) node[midway, below, xshift=1mm] {$i_2$};
+
+  \end{tikzpicture}
+\end{document}

@@ -1,0 +1,22 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\usepackage{siunitx}
+\usepackage{pgfplots}
+
+\begin{document}
+%\usepgfplotslibrary{colormaps} 
+\begin{tikzpicture} 
+  \begin{axis}[
+      xmin = 0,
+      xlabel = Fréquence,
+      ylabel = Amplitude (dB),
+      xtick = {0, 180, 3*180, 5*180, 7*180},
+      xticklabels = {0, $f_0$, $3f_0$, $5f_0$, $7f_0$},
+    ]
+    \addplot[
+      samples=200, smooth, domain=0:360*4,
+      ] {10*log10(20000*(1+0.999*cos(x)))+50};
+  \end{axis}
+\end{tikzpicture}
+\end{document}

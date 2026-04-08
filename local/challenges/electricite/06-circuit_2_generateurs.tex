@@ -1,0 +1,21 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+  \begin{tikzpicture}    
+    \draw (0,0) to[V=$u_1$] ++(2, 0) coordinate (A)
+    to[V=$u_2$] ++(2,0) 
+    to[R=$R_2$] ++ (0, -3)
+    to[short] ++(-4, 0) 
+    to[short] ++(0, 0.5) coordinate (B)
+    to[short] ++(0.5, 0)
+    to[R=$R_4$] ++(0, 2)
+    to[short] ++(-0.5, 0)
+    to[short, i=$i$ ] ++(0, 0.5)
+    (B) to[short] ++(-0.5, 0)
+    to[R=$R_1$ ] ++(0, 2)
+    to[short] ++(0.5, 0)
+    (A) to[R=$R_3$] ++(0, -3) 
+    ; 
+  \end{tikzpicture}
+\end{document}

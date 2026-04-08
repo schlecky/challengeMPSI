@@ -1,0 +1,13 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture}
+  \draw[dashed] (-2, 0) -- (2,0);
+  \draw[thick] (-2, 0) -- (0, -3) node[midway, below, sloped]{$k, \ell_0$} ;
+  \draw[thick] (2, 0) -- (0, -3)node[midway, below, sloped]{$k, \ell_0$} ;
+  \fill[black] (0, -3) circle (0.1);
+  \draw[latex-latex] (-2, 0.3) -- (2, 0.3) node[midway, above]{$d$};
+  \draw[latex-latex] (0, -0.1) -- (00, -2.9) node[midway, fill=white]{$D$}; 
+\end{tikzpicture}
+\end{document}

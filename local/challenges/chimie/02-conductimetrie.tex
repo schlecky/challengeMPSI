@@ -1,0 +1,28 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{mhchem}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture}
+   \begin{axis}[
+   ymax=10,
+   xmin=0,
+   xmax=10,
+   ymin=0,
+   height=8cm,
+   clip=false,
+   width = 10cm,
+   xlabel = $V_a$,
+   ylabel = $\sigma\frac{V_a+V_b}{V_b}$,
+   xtick=\empty,
+   ytick=\empty,
+   xticklabels={},
+   yticklabels = {},
+   ]
+     \addplot[domain=0:5, thick] {3*x/5};
+     \addplot[domain=5:10, thick] {3 + 5*(x-5)/5};
+     \draw[dashed] (axis cs:5, 0) node[above=1pt, fill=white]{$V_\text{eq}$} -- (axis cs:5, 10); 
+   \end{axis} 
+  \end{tikzpicture}
+\end{document}

@@ -1,0 +1,27 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture} 
+  \draw (0,0) to[V=$E$] (0,2) 
+  to[R=$R$]  (0, 4)
+  to[short] (2, 4)
+  to[R=$R'$] (2,0)
+  to[short] (0,0)
+  (2,0) to[short] (4, 0) 
+  to[zzDo] (4,4)
+  to[short] (2,4);
+\begin{scope}[xshift=8cm]
+  \draw (0,0) to[V=$E$] (0,2) 
+  to[R=$R$]  (0, 4)
+  to[short] (2, 4)
+  to[R=$R'$] (2,0)
+  to[short] (0,0)
+  (2,0) to[short] (4, 0) 
+  to[V=$U_z$ ] (4,2)
+  to[R=$\rho$ ] (4,4)
+  to[short] (2,4);
+\end{scope}
+\draw (6, 2) node {$\Leftrightarrow$};
+\end{tikzpicture}
+\end{document}

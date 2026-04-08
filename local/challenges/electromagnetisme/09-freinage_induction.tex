@@ -1,0 +1,15 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture} 
+  \draw[very thick] (0,0) -- ++(0, 4);
+  \draw[very thick, -latex] (0, 2) ++(0, 0.1) node[left]{$I$} ;
+  \draw (3, 0.5) rectangle (4, 3.5);
+  \draw[-latex] (0,0) node[below left]{$O$}  -- (5, 0) node[right]{$r$}; 
+  \draw[latex-latex] (0.2, 0.8) -- (2.8, 0.8) node[midway, below]{$L$} ; 
+  \draw[thick, -latex] (3, 2) -- ++(-1, 0) node[above]{$\vv*{v}{0}$};
+  \draw[<->] (4.5, 0.5) -- (4.5, 3.5) node[midway, right]{$h$}; 
+  \draw[<->] (3, 4) -- (4, 4) node[midway, above]{$a$}; 
+\end{tikzpicture}
+\end{document}

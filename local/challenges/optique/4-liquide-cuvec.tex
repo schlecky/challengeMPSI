@@ -1,0 +1,25 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+  \begin{tikzpicture}    
+  \fill[fill=gray!20] (0, -2) coordinate(A) -- (4, -2) coordinate (O) -- ++(135:4.5) coordinate(D) -- (D-|A) coordinate (E) -- (A);
+    \draw[] (A) -- (4, -2) -- ++(135:5) coordinate(C) (C-|A) coordinate (B) -- (A);
+    \draw[rayon](-1, 0) -- (0,0);
+    \draw[rayon](0, 0) -- (2,0) coordinate (J);
+    \draw[rayon] (J) -- ++(-20:{2/cos(20)}) node[right]{$P(z)$} ;
+    \draw[thick] (4, -2)  -- (4, 1) node[right]{Écran};
+    \draw (A) ++(0.2, 0) -- ++(0, 0.2) -- ++(-0.2, 0);
+    \draw[dotted] (A) -- ++(0, -0.5) coordinate (Ap);
+    \draw[dotted] (A) -- ++(-0.5, 0) coordinate (App);
+    \draw[dotted] (O) -- ++(0, -0.5) coordinate (Op);
+    \draw[<->] (Ap) -- (Op) node[midway, fill=white]{$\ell$}; 
+    \draw[<->] (App) -- ++(0, 2) node[midway, fill=white]{$\ell/2$}; 
+    \draw (O) node[below right]{$O$};
+    \draw[-latex] (4, 1) -- ++(0,1) node[above]{$z$}; 
+    \draw[dotted] (J) -- ++(2,0); 
+    \draw[dashed] (J) ++ (45:-1) -- ++(45:2); 
+    \draw (J) ++ (45:-0.5) arc(-135:-180:0.5) node[midway, left, yshift=-0.1cm]{$\pi/4$}; 
+    \draw (J) ++ (45:0.5) arc(45:-20:0.5) node[midway, right]{$i'$}; 
+  \end{tikzpicture}
+\end{document}

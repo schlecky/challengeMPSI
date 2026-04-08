@@ -1,0 +1,13 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture} 
+  \draw (0,0) to[R=$R$] (2,0)
+  to[C, l_=$C$]  (2, -2)
+  to[short] (0, -2)
+  ;
+  \draw[-latex] (-0.3, -1.9) -- (-0.3, -0.1) node[midway, left]{$e(t)$}; 
+  \draw[-latex] (2.7, -1.9) -- (2.7, -0.1) node[midway, right]{$s(t)$}; 
+\end{tikzpicture}
+\end{document}

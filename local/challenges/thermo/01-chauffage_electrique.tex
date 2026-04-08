@@ -1,0 +1,13 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture} 
+  \draw (-1, -1.5) to[V=$E$] ++(0, 1.5) to[nos] ++(0, 1.5)
+    to[short] ++(2,0) to[R=$R$] ++(0, -3) to[short] ++(-2, 0) ; 
+  \draw[thick] (0, -2) rectangle (8, 2);
+  \draw[fill=gray] (3.8, -2) rectangle (4.2, 2);
+  \draw (3, -1) node {(1)};
+  \draw (5, -1) node {(2)};
+\end{tikzpicture}
+\end{document}

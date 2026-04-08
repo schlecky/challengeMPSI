@@ -1,0 +1,45 @@
+
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture}    
+  \coordinate (A) at (0,0);
+  \coordinate (B) at (0, 1);
+  \coordinate (F1) at (1,0);
+  \coordinate (O1) at (3,0); 
+  \coordinate (Fp1) at (5,0);
+  \coordinate (F2) at (7,0);
+  \coordinate (O2) at (9,0);
+  \coordinate (Fp2) at (10,0); 
+  \coordinate (B1) at (7, -1.34);
+  \draw[-latex] (A) -- (11, 0);
+
+  \draw[fill=black] (A) circle (0.05) node[below] {$A$};
+  \draw[fill=black] (B)  node[above] {$B$};
+  \draw[fill=black] (F1) circle (0.05) node[above] {$F_1$};
+  \draw[fill=black] (O1) circle (0.05) node[above right] {$O_1$};
+  \draw[fill=black] (O2) circle (0.05) node[above left] {$O_2$};
+  \draw[fill=black] (Fp2) circle (0.05) node[below right] {$F'_2$};
+  \draw[fill=black] (F2) circle (0.05) node[above, above left] {$A_1$};
+  \draw[fill=black] (F2) circle (0.05) node[above, above right] {$F_2$};
+
+  \draw[latex-latex,thick] (O1) ++(0,1)node[above]{$L_1$} -- ++(0,-2);
+  \draw[thick, latex-latex] ($(O2)+(0,1)$) node[above]{$L_2$} -- ($(O2)+(0,-1)$);
+
+  \draw[rayon] (B) -- (O1); 
+  \draw[rayon] (O1)-- (B1);
+  \draw (B1) node[below]{$B1$};
+  \draw[rayon, shorten >=-2cm] (B1) -- (O2); 
+
+  %\draw (0.5,0) arc(180:180-atan(1/3):2.5) node[midway,left]{$\alpha$};
+  \draw (10,0) arc(0:atan(1.34/2):1) node[midway,right]{$\alpha_M$};
+  \draw (8,0) arc(180:180+atan(1.34/2):1) node[midway,left]{$\alpha_M$};
+  \draw[thick,-latex](F2) -- (B1);
+  \draw[thick,-latex](A) -- (B);
+  \draw[<->] (0, -1) -- (3, -1) node[midway, below] {$d$} ; 
+  \draw[<->] (-0.5, 0) -- (-0.5, 1) node[midway, left] {$l$} ; 
+  \draw[<->] (7, 1) -- (9, 1) node[midway, above] {$f'_2$} ; 
+
+\end{tikzpicture}
+\end{document}

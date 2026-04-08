@@ -1,0 +1,11 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture} 
+  \draw (0,0) coordinate (O) to[short] ++(0, 0.7)
+  to[R=$R$] ++(2,0) to[L=$L$] ++(2,0) to[short] ++(0, -0.7)
+  (O) to[short](0, -0.7) to[R=$R$]  ++(2, 0) to[C=$C$] ++(2,0) to[short] ++(0, 0.7) 
+  ++(0, -0.7) to[short] ++ (0, -1) to[V=$e(t)$, i=$i(t)$ ] ++(-4, 0) to[short] ++(0,1); 
+\end{tikzpicture}
+\end{document}

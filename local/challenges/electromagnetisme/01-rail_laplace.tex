@@ -1,0 +1,14 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture} 
+  \draw (0, -1.5) to[V=$E$] ++(0, 1.5) to[R=$R$ ] ++(0, 1.5)
+    to[short] ++(5,0)  ++(0, -3) to[short] ++(-5, 0) ; 
+  \draw[fill=gray] (3.85, -2) rectangle (4.15, 2);
+  \draw (4, 2) node[above]{Barre};
+  \draw (2, 0) coordinate(B) circle (5pt);
+  \fill (B) circle (1pt) node[below=5pt]{$\vv{B}$} ;
+  \draw[<->] (5, -1.4) -- (5, 1.4) node[midway, right]{$L$}; 
+\end{tikzpicture}
+\end{document}

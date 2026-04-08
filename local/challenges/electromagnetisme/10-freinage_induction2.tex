@@ -1,0 +1,15 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture} 
+  \draw[thick] (4, 0) arc (0:-180:4);
+  \draw[very thick] (0,0) node[above left]{$O$} -- ++(-45:4); 
+  \draw[dashed] (0, 1) -- (0, -5);
+  \draw[-latex] (0, -1) arc(-90:-45:1) node[midway, below]{$\theta$}; 
+  \draw (0,0) to[bend left] (2, 0) to[bend right](4, 0);
+  \draw[fill] (-2, 0) circle(1pt);
+  \draw[] (-2, 0) circle(4pt) node[left=4pt] {$\vv{B} = B\vex$};
+  \draw[-latex] (5, 0) -- ++(0, -1) node[midway, right] {$\vv{g}$}; 
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,19 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+  \begin{tikzpicture}    
+    \fill[gray!10] (-3, 0) rectangle (4, -3);
+    \draw (-3, 0) -- (-2, 0) node[above]{air ($n=1$) } node[below]{liquide ($n_2$) } -- (4, 0);
+    \coordinate (A) at (0,0.2);
+    \coordinate (B) at (3,0.2);
+    \coordinate (C) at (0, -2.5);
+    \draw[fill=gray!30] (A) node[above left]{$A$} -- (B) node[above right]{$B$}  -- (C) node[below]{$C$} --cycle;
+    \draw (B) ++(-0.7, 0) arc(180:{180+atan(2.7/3)}:0.7) node[midway, left]{$\alpha$};  
+    \draw (A) ++(0.1, 0) -- ++(0, -0.1) -- ++(-0.1, 0);
+    \foreach \x in {0.1, 0.5, ..., 2.9}{
+      \draw[thick, rayon](\x, 1) -- (\x, 0.2);
+    } 
+    \draw (0, -0.5) node[right]{prisme ($n_1$)}; 
+  \end{tikzpicture}
+\end{document}

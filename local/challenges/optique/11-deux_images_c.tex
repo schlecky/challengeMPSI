@@ -1,0 +1,24 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture}    
+  \coordinate (A1) at (1,0);
+  \coordinate (O) at (6, 0);
+  \coordinate (A2) at (10,0);
+  \coordinate (Ap) at (7,0);
+  \draw[-] (0,0) -- (11, 0);
+
+  \draw[fill=black] (A1) circle (0.05) node[above] {$A_1$} node[below]{$O$} ;
+  \draw[fill=black] (A2) circle (0.05) node[above] {$A_2$} node[below]{$d$} ;
+  \draw[fill=black] (O) circle (0.05) node[below left] {$O$};
+  \draw[fill=black] (Ap) circle (0.05) node[above] {$A'$};
+
+  \draw[latex-latex,thick] (O) ++(0,1)node[above]{$L$} -- ++(0,-2);
+
+  \draw[<->] (1, -1) -- (10, -1) node[midway, below] {$d$} ; 
+  \draw[<->] (6, -0.5) -- (7, -0.5) node[midway, below] {$d'$} ; 
+  \draw[<->] (1, 1) -- (6, 1) node[midway, above] {$x$} ; 
+
+\end{tikzpicture}
+\end{document}

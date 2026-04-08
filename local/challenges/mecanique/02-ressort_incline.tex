@@ -1,0 +1,22 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture}
+  \begin{scope}[rotate=20]
+%mur
+\draw (0,-1) -- (0,1);
+\foreach \h in {-1,-0.8,...,1} {
+  \draw (0,\h) -- ($(-0.3,\h-0.3)$);
+}
+%axe
+\draw[] (0,-0.5) -- (10,-0.5);
+\draw[decorate,decoration={zigzag,amplitude=0.3cm,pre length=0.5cm,post length=0.5cm}] (0,0.1) -- (5,0.1);
+
+\draw[thick,rounded corners=1mm] (5,0.7) rectangle (6.2,-0.45) node[midway] {$m$};
+\draw (2,1) node[align=center, rotate=20] {$k$, $l_0$ };
+  \end{scope}
+  \draw (-70:0.5) coordinate(A) -- ++(10, 0);
+  \draw (A) ++(1, 0) arc(0:20:1) node[midway, right]{$\alpha$};
+\end{tikzpicture}
+\end{document}

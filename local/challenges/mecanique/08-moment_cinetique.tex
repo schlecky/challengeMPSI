@@ -1,0 +1,14 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture}
+  \draw[dashed] (0,0) -- ++(5,0);
+  \draw[-latex] (4,0) coordinate(P) node[above right]{$M(m)$} -- ++(120:2) node[left]{$\vv{v}$}; 
+  \draw[] (1, 0) ++(45:3pt) -- ++(225:6pt) (1,0)++(135:3pt) -- ++(-45:6pt); 
+  \draw[] (1, 0) circle(3pt) node[above left=3pt]{$\Delta$} ; 
+  \draw[fill=black] (P) circle(0.5pt);
+  \draw (P) ++(-0.5, 0) arc(180:120:0.5) node[midway, left]{$\alpha$}; 
+  \draw[<->] (1, -0.3) -- (4, -0.3) node[midway, below]{$d$}; 
+\end{tikzpicture}
+\end{document}

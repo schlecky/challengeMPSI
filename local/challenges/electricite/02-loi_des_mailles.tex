@@ -1,0 +1,14 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+  \begin{tikzpicture}    
+    \draw (0,0) to[R, v^<=$U_1$] ++(2, 0)
+      to[R, v^>=$U_2$] ++(2, 0)
+      to[R, v^>=$U_3$] ++(0, -2)
+      to[R, v^>=$U_4$] ++(-2, 0)
+      to[R, v^<=$U_5$] ++(-2, 0)
+      to[R, v^>=$U_6$] ++(0, 2)
+      ; 
+  \end{tikzpicture}
+\end{document}

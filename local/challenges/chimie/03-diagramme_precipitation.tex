@@ -1,0 +1,31 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage[version=4]{mhchem}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture}
+   \begin{axis}[
+   ymax=1.1,
+   xmin=0,
+   xmax=15,
+   ymin=0,
+   height=8cm,
+   %clip=false,
+   width = 10cm,
+   xlabel = $p\ce{I-}$,
+   ylabel = $ \ce{[X^2+]}/c$,
+   xtick={3.5, 13.5},
+   %ytick={0,1},
+   xticklabels={$p_1$, $p_2$},
+   %yticklabels = {},
+   ]
+     \addplot[domain=3.5:15, thick] {1};
+     \addplot[domain=0.01:3.5, thick, samples=200] {10*1e-8/10^(-2*x)};
+     \addplot[domain=13.5:15, thick, gray] {1};
+     \addplot[domain=0.01:13.5, thick, gray, samples=200] {10*1e-28/10^(-2*x)};
+     \draw[dashed] (axis cs:3.5, 1) -- (axis cs:3.5, 0);
+     \draw[dashed] (axis cs:13.5, 1) -- (axis cs:13.5, 0);
+   \end{axis} 
+  \end{tikzpicture}
+\end{document}

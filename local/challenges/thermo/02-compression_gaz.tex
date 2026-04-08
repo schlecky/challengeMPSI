@@ -1,0 +1,13 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture} 
+  \draw (0,0) rectangle (2, 5);
+  \fill[white] (-0.2, 4) rectangle (0.2, 4.3);
+  \draw[ressort] (1, 5) -- (1, 2);
+  \draw[fill=gray] (0, 2) rectangle (2, 1.8);
+  \draw (1, 1.8) node[below] {gaz};
+  \draw (0, 5) node[below right]{$P_0$}; 
+\end{tikzpicture}
+\end{document}

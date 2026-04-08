@@ -1,0 +1,14 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture}
+  \draw[-latex] (0, 0) -- (0,5) node[right]{$z$}; 
+  \draw (0,0) -- ++(120: 4) coordinate (M);
+  \fill (M) circle (3pt) node[above=3pt]{$M$} ;
+  \fill (0,0) circle (1pt);
+  \draw (0,0) circle (3pt) node[right=3pt]{$x$};
+  \draw[-latex] (2, 2) -- ++(0, -1) node[midway, right]{$\vv{g}$}; 
+  \draw[-latex] (0, 1) arc(90:120:1) node[midway, above]{$\theta$}; 
+\end{tikzpicture}
+\end{document}

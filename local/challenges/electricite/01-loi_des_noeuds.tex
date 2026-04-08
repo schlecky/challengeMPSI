@@ -1,0 +1,15 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+  \begin{tikzpicture}    
+    \draw (0,0) to[short, *-, i<=$i_1$] ++(0:2); 
+    \draw (0,0) to[short, i<=$i_2$] ++(45:2); 
+    \draw (0,0) to[short, i>=$i_3$] ++(90:2); 
+    \draw (0,0) to[short, i<=$i_4$] ++(135:2); 
+    \draw (0,0) to[short, i>=$i_5$] ++(180:2); 
+    \draw (0,0) to[short, i<=$i_6$] ++(-135:2); 
+    \draw (0,0) to[short, i<=$i_7$] ++(-90:2); 
+    \draw (0,0) to[short, i>=$i_8$] ++(-45:2); 
+  \end{tikzpicture}
+\end{document}

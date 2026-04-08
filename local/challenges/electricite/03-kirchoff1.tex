@@ -1,0 +1,17 @@
+
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+  \begin{tikzpicture}    
+    \draw (0,0) to[V=E] ++(4, 0) 
+      to[short] ++(0, -2) coordinate (A) 
+      to[R = $R_2$] ++(-2,0) coordinate (B)
+      to[R = $R_1$] ++(-2, 0)
+      to[short] (0,0)
+      (A) to[short] ++(0,-2)
+      to[R=$R_3$, v>=$u$ ] ++(-2,0)
+      to[short] ++(0, 2)
+      ; 
+  \end{tikzpicture}
+\end{document}

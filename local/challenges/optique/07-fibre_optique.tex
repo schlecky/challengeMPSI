@@ -1,0 +1,22 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+  \begin{tikzpicture}
+    \fill[gray](0, -1.5) rectangle (10, 1.5);
+    \fill[gray!30](0, -1) rectangle (10, 1);
+    \foreach \y in {1.5, 1, -1, -1.5} {
+      \draw[] (0, \y) -- (10, \y);    
+    }
+  \draw[dashed] (-1.5, 0) -- (10,0);
+  \draw[rayon,black] (0,0) ++ (220: 2) -- (0,0); 
+  \draw[rayon,black] (0,0)  -- ++({1/tan(30)},1) coordinate (B); 
+  \draw[rayon,black] (B)  -- ++({2/tan(30)},-2) coordinate (C); 
+  \draw[rayon,black] (C)  -- ++({2/tan(30)},2) coordinate (C); 
+  \draw (-0.5, 0) arc(180:220:0.5) node[midway, left, yshift=-4px] {$i_0$};
+  \draw (B) node[above left]{$B$};
+  \draw (0,0) node[above left]{$A$};
+  \draw[dashed] (B) ++ (0, 0.5) -- ++(0, -1.3);
+  \draw (5,1) node[below]{$n_1$} node[above]{$n_2<n_1$ };  
+  \end{tikzpicture}
+\end{document}

@@ -1,0 +1,16 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+\begin{tikzpicture} 
+  \draw (0,0) to[R=$R$] (2,0) coordinate(A)
+  to[C, l_=$C$]  (2, -2)
+  to[short] (0, -2)
+  (A) to[R=$R$] ++(2,0) 
+  to[L, l_=$L$] ++(0, -2)
+  to[short] ++(-2,0)
+  ;
+  \draw[-latex] (-0.3, -1.9) -- (-0.3, -0.1) node[midway, left]{$\ul{e}$}; 
+  \draw[-latex] (4.7, -1.9) -- (4.7, -0.1) node[midway, right]{$\ul{s}$}; 
+\end{tikzpicture}
+\end{document}

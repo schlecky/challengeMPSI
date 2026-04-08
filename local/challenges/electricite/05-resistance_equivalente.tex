@@ -1,0 +1,20 @@
+
+
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{nono}
+\begin{document}
+  \begin{tikzpicture}    
+    \draw (0,0) node[above]{$A$}  to[short, *-] ++(1, 0) coordinate (A)
+      to[short] ++(0, -1)
+      to[R = $R_2$] ++(2,0) 
+      to[R = $R_1$] ++(2, 0)
+      to[short] ++(0,1)
+      (A) to[short] ++(0,1)
+      to[R=$R_3$ ] ++(4,0)
+      to[short] ++(0, -1)
+      to[R=$R_4$] ++(2, 0)
+      to[short, -*] ++(1, 0) node[above]{$B$};
+      ; 
+  \end{tikzpicture}
+\end{document}
