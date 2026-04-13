@@ -28,7 +28,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["challengempsi.schleck.ovh","challengempsi.pythonanywhere.com","localhost"]
 
-CSRF_TRUSTED_ORIGINS = ["https://challengeMPSI.schleck.ovh"]
+CSRF_TRUSTED_ORIGINS = ["https://challengempsi.schleck.ovh"]
 
 # Application definition
 
