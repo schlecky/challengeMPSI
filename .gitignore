@@ -7,3 +7,4 @@ env
 *.aux
 *.synctex.gz
 *.fdb_latexmk
+*.pyc

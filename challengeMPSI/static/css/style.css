@@ -326,6 +326,29 @@ i.fa-xmark{
     box-sizing: border-box;
 }
 
+#validationPopup{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  background:white;
+  border:solid 1px black;
+  padding:20px;
+  width:50%;
+  border-radius:5px;
+  max-height:70vh;
+  overflow:scroll;
+}
+
+#validationPopup #tableValidations{
+  width:100%;
+}
+
+#validationPopup h1{
+  font-size:larger;
+  border-bottom:solid 1px gray;
+}
+
 td{
   position:relative;
   line-height:1.5rem

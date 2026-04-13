@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-5xy@ncjl=gn_4ti+$9y8f%3dr_gk9b$2x9+0)n1$sd3-*hsn33'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["challengempsi.schleck.ovh","challengempsi.pythonanywhere.com","localhost"]
 
@@ -118,7 +118,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {
-        "fileError": {
+        "file": {
             "class": "logging.FileHandler",
             "filename": "log/error.log",
         },

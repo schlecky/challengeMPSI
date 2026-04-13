@@ -77,7 +77,7 @@
           table.empty();
           html_content = ""
           for (let u of result){
-            html_content += "<tr><td><a href=/profile/"+u['id']+"/>"+u['prenom']+" "+u['nom']+"</a></td></tr>"
+            html_content += "<tr><td><a href=/profile/"+u['id']+"/>"+u['prenom']+" "+u['nom']+".</a></td></tr>"
           }
           table.html(html_content);
 
