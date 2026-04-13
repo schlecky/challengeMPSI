@@ -323,7 +323,8 @@ i.fa-xmark{
 .validation_num{
   font-size:10pt;
   float:right !important;
-    box-sizing: border-box;
+  box-sizing: border-box;
+  cursor:pointer;
 }
 
 #validationPopup{
