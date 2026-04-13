@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-5xy@ncjl=gn_4ti+$9y8f%3dr_gk9b$2x9+0)n1$sd3-*hsn33
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["challengempsi.pythonanywhere.com","localhost"]
+ALLOWED_HOSTS = ["challengempsi.schleck.ovh","challengempsi.pythonanywhere.com","localhost"]
 
 
 # Application definition
@@ -113,6 +113,23 @@ USE_I18N = True
 
 USE_TZ = True
 
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": "logs/error.log",
+        },
+    },
+    "loggers": {
+        "": {
+            "level": "ERROR",
+            "handlers": ["file"],
+        },
+    },
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
