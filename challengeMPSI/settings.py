@@ -118,14 +118,14 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {
-        "file": {
+        "fileError": {
             "class": "logging.FileHandler",
-            "filename": "logs/error.log",
+            "filename": "log/error.log",
         },
     },
     "loggers": {
         "": {
-            "level": "ERROR",
+            "level": "WARNING",
             "handlers": ["file"],
         },
     },

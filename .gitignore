@@ -1,5 +1,7 @@
+challengeMPSI/__pycache__/
 db.sqlite3
 tags
+env
 *.log
 *.out
 *.aux
