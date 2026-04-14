@@ -31,6 +31,7 @@ urlpatterns = [
     path(r'logout/', views.logoutView, name='logout'),
     path(r'check_epreuve/<int:id_epreuve>/', views.soumissionReponse, name='check_epreuve'),
     path(r'valide_par/<int:id_epreuve>/', views.validePar, name='valide_par'),
+    path(r'log/', views.logView, name='log'),
 ]
 
 

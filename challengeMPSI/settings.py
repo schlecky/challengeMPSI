@@ -120,8 +120,10 @@ LOGGING = {
     "disable_existing_loggers": False,
     "handlers": {
         "file": {
-            "class": "logging.FileHandler",
+            "class": "logging.handlers.RotatingFileHandler",
             "filename": "log/error.log",
+            "maxBytes": 1024*1024*5,
+            "backupCount": 5,
         },
     },
     "loggers": {

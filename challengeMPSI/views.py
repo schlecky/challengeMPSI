@@ -63,6 +63,14 @@ def loginView(request):
     else:
         return render(request, 'login.html')
 
+
+
+def logView(request):
+    if request.user.is_authenticated and request.user.is_staff:
+        fich = open("log/error.log")
+        return HttpResponse(fich.read(), content_type="text/plain");
+
+
 def adminView(request):
     if request.user.is_authenticated and request.user.is_staff:
         classes = Classe.objects.all()
