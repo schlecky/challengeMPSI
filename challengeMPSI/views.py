@@ -69,6 +69,8 @@ def logView(request):
     if request.user.is_authenticated and request.user.is_staff:
         fich = open("log/error.log")
         return HttpResponse(fich.read(), content_type="text/plain");
+    else:
+        return redirect('accueil')
 
 
 def adminView(request):
