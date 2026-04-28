@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-5xy@ncjl=gn_4ti+$9y8f%3dr_gk9b$2x9+0)n1$sd3-*hsn33
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["challengempsi.schleck.ovh","challengempsi.pythonanywhere.com","localhost"]
+ALLOWED_HOSTS = ["challengempsi.schleck.ovh","challengempsi.pythonanywhere.com","localhost", "164.132.59.246"]
 
 CSRF_TRUSTED_ORIGINS = ["https://challengempsi.schleck.ovh"]
 
