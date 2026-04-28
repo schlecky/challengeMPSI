@@ -145,6 +145,9 @@ def epreuveView(request, id_epreuve):
             return redirect("accueil");
         exec(epreuve.dataFunc, globals())
         data = dataFunc(etudiant.seed)
+        for k in data:
+            if type(data[k]).__module__ == 'numpy':
+                data[k] = data[k].item()
         valide = Succes.objects.filter(etudiant=etudiant, epreuve=epreuve)
         return render(request, 'epreuve.html', {'epreuve':epreuve,
                                                 'data':str(data),
