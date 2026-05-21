@@ -1,4 +1,4 @@
-challengeMPSI/__pycache__/
+challengeMPSI/__pycache__/*
 static/*
 local/*
 db.sqlite3
