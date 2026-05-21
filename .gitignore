@@ -1,4 +1,6 @@
 challengeMPSI/__pycache__/
+static/*
+local/*
 db.sqlite3
 tags
 env
