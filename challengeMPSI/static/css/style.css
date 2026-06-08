@@ -293,7 +293,7 @@ tr:not(thead tr):hover {
 }
 
 #liste_epreuves h3:not(:first-child){
-   margin-top:80px;
+  margin-top:80px;
 }
 
 #liste_epreuves table{
@@ -532,7 +532,7 @@ h1.nom_profil{
   font-size: 20px;
   height:50px;
   line-height: 50px;
-  text-anchor: middle
+  text-anchor: middle;
 }
 
 .tooltip {
@@ -741,25 +741,49 @@ div {
   margin-top:10px;
 }
 
+
+#editEpreuveBtns{
+  position:fixed;
+    bottom:20px;
+   left:20px;
+}
+
 .btn{
   cursor:pointer;
-  background:#6FCF97;
-  display:inline-block;
+  display:block;
   padding:6px;
+  margin-bottom:5px;
   border-radius:6px;
-  border: solid 1px #2FA084;
   color:white;
-  position:fixed;
-  bottom:20px;
-  right:20px;
   z-index:99;
 }
 
-.btn:hover{
+.btnOk{
+  border: solid 1px #2FA084;
+  background:#6FCF97;
+}
+
+.btnOk:hover{
   background:#2FA084;
+}
+
+.btnDanger{
+  border: solid 1px #923826;
+  background:#CD533B;
+}
+
+.btnDanger:hover{
+  background:#923826;
 }
 
 .lienEdit{
   float:right;
   margin-right:10px;
+}
+
+#supprConfirm{
+  position:absolute;
+  width:200px;
+  right:0px;;
+  top:-0px;
 }

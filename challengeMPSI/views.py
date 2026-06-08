@@ -5,7 +5,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.template import engines, TemplateSyntaxError
 from django.template.loader import get_template
 from django.db.models import Max, Sum, Count, Q, F, Value, Func, IntegerField
-from .models import Epreuve, Etudiant, Succes, Domaine, Chapitre, Classe
+from django.urls import reverse
+from .models import Epreuve, Etudiant, Succes, Domaine, Chapitre, Classe, Image
 import random as rd
 import numpy as np
 import datetime as dt
@@ -187,6 +188,20 @@ def epreuveView(request, id_epreuve):
     else:
         return redirect('login')
 
+def getImages(request, id_domaine):
+    if request.user.is_authenticated and request.user.is_staff:
+        if request.method == 'GET':
+            images = Image.objects.filter(imageDomaine__id=id_domaine)
+            data = []
+            for i in images:
+                data.append({
+                    'name':i.image.name,
+                    'path':i.image.path
+                    })
+            
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+
 
 def adminViewEditEpreuve(request, id_epreuve):
     if request.user.is_authenticated and request.user.is_staff:
@@ -196,6 +211,33 @@ def adminViewEditEpreuve(request, id_epreuve):
         elif request.method == 'POST':
             res = majEpreuve(request.body, id_epreuve)
             return HttpResponse(json.dumps({'resultat':res}), content_type="application/json")
+    else:
+        return redirect('login')
+
+def adminAddEpreuve(request, id_chapitre):
+    if request.user.is_authenticated and request.user.is_staff:
+        chapitre = Chapitre.objects.get(id=id_chapitre)
+        epreuve = Epreuve.objects.create(chapitre=chapitre, domaine=chapitre.domaine)
+        epreuve.save()
+        time.sleep(2)
+        print(epreuve.id)
+        url = reverse('editEpreuve', kwargs={'id_epreuve': epreuve.id})
+        print("URL =", url)
+        response = redirect('editEpreuve', id_epreuve=epreuve.id)
+        print("location =", response["Location"])
+        return redirect(url)
+        # return redirect('editEpreuve', id_epreuve=epreuve.id)
+    else:
+        return redirect('login')
+
+def adminDelEpreuve(request, id_epreuve):
+    if request.user.is_authenticated and request.user.is_staff:
+        if request.method == 'POST':
+            epreuve = Epreuve.objects.get(id=id_epreuve)
+            chapitre = epreuve.chapitre
+            if epreuve is not None:
+                epreuve.delete()
+            return HttpResponse(json.dumps({'resultat':True}), content_type="application/json")
     else:
         return redirect('login')
 

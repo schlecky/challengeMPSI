@@ -46,7 +46,7 @@
 {% endfor %}
 </table>
     {% if user.is_staff %}
-    <a class="lienAjoutEpreuve" href="/administration/addEpreuve/"><i class="fa-regular fa-square-plus"></i></a>
+    <a class="lienAjoutEpreuve" href="/administration/addEpreuve/{{ c.chapitre.id }}/"><i class="fa-regular fa-square-plus"></i></a>
     {% endif %}
 {% endfor %}
 </div>

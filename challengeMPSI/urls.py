@@ -29,6 +29,8 @@ urlpatterns = [
     path('administration/etudiants', views.adminViewEtudiants,name='adminEtudiants'),
 
     path('administration/editEpreuve/<int:id_epreuve>/', views.adminViewEditEpreuve,name='editEpreuve'),
+    path(r'administration/addEpreuve/<int:id_chapitre>/', views.adminAddEpreuve, name='addEpreuve'),
+    path(r'administration/delEpreuve/<int:id_epreuve>/', views.adminDelEpreuve, name='delEpreuve'),
 
 
     # API
@@ -38,6 +40,7 @@ urlpatterns = [
     path(r'api/domaines/', views.listeDomaines, name='listeDomaines'),
     path(r'api/epreuves/<int:id_domaine>/', views.listeEpreuves, name='listeEpreuves'),
     path(r'api/epreuve/<int:id_epreuve>/', views.getEpreuve, name='getEpreuve'),
+    path(r'api/images/<int:id_domaine>/', views.getImages, name='getImages'),
 
 
 
@@ -50,7 +53,7 @@ urlpatterns = [
     path(r'valide_par/<int:id_epreuve>/', views.validePar, name='valide_par'),
     path(r'log/', views.logView, name='log'),
 ]
-
+ 
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

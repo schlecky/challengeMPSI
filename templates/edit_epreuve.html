@@ -5,6 +5,7 @@
 <script src="{% static 'js/js.cookie.min.js' %}"></script>
 <section class="section_edit_epreuve">
   <div>
+    <p><a href="/domaine/{{ epreuve.chapitre.domaine.id }}/">Retour</a></p>
     <p><span>Titre</span></p><input type="text" id="inputTitre" value="{{ epreuve.titre|safe }}"></input>
   </div>
   <div>
@@ -33,8 +34,17 @@
     </div>
   </div>
 
-  <div id="editEnonceBtn" class=btn onclick="submit()">
+  <div id=editEpreuveBtns>
+  <div id="editEpreuveeBtnEnregistrer" class="btn btnOk" onclick="submit()">
     Enregistrer
+  </div>
+  <div id="editEpreuveBtnSupprimer" class="btn btnDanger" onclick='$("#supprConfirm").show()'>
+    Supprimer
+  </div>
+  <div id="supprConfirm">
+    <div id="editEpreuveBtnSupprimerAnnul" class="btn btnOk" onclick='$("#supprConfirm").hide()'>Annuler suppression</div>
+    <div id="editEpreuveBtnSupprimerConf" class="btn btnDanger" onclick="supprEpreuve()">Confirmer suppression</div>
+  </div>
   </div>
 </section>
 
@@ -120,6 +130,8 @@
       textareaEnonce.value = editorEnonce.getSession().getValue();
       textareaSolution.value = editorSolution.getSession().getValue();
     }
+
+    $("#supprConfirm").hide();
   }
 
   function submit(){
@@ -141,6 +153,21 @@
       clearTimeout(timeout)
     })
     event.preventDefault();
+  }
+
+  function supprEpreuveConf(){
+    $('#EditEpreuveBtnSupprimerConf').show();
+  }
+
+  function supprEpreuve(){
+    $.ajax({
+      url:"/administration/delEpreuve/{{ epreuve.id }}/",
+      method:'POST',
+      headers: {'X-CSRFToken': Cookies.get("csrftoken")},
+      success: function(data){
+        document.location = '/domaine/{{ epreuve.chapitre.domaine.id }}/'
+      }
+    });
   }
 
 //    form = document.getElementById("epreuve_form");
