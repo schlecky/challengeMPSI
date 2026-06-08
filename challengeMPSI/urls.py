@@ -23,7 +23,24 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.accueilView,name='accueil'),
-    path('administration/', views.adminView,name='admin'),
+    path('administration/', views.adminViewResultats,name='admin'),
+    path('administration/resultats', views.adminViewResultats,name='adminResultats'),
+    path('administration/epreuves', views.adminViewEpreuves,name='adminEpreuves'),
+    path('administration/etudiants', views.adminViewEtudiants,name='adminEtudiants'),
+
+    path('administration/editEpreuve/<int:id_epreuve>/', views.adminViewEditEpreuve,name='editEpreuve'),
+
+
+    # API
+    path(r'api/classes/', views.listeClasses, name='listeClasses'),
+    path(r'api/etudiants/<int:id_classe>/', views.listeEtudiants, name='listeEtudiants'),
+    path(r'api/etudiant/<int:id_etudiant>/', views.getEtudiant, name='getEtudiants'),
+    path(r'api/domaines/', views.listeDomaines, name='listeDomaines'),
+    path(r'api/epreuves/<int:id_domaine>/', views.listeEpreuves, name='listeEpreuves'),
+    path(r'api/epreuve/<int:id_epreuve>/', views.getEpreuve, name='getEpreuve'),
+
+
+
     path(r'domaine/<int:id_domaine>/', views.listeEpreuvesView, name='listeEpreuves'),
     path(r'epreuve/<int:id_epreuve>/', views.epreuveView, name='epreuve'),
     path(r'profile/<int:id_etudiant>/', views.profileView, name='profile'),

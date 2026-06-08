@@ -86,6 +86,35 @@ def adminView(request):
     else:
         redirect("accueil");
 
+
+def adminViewResultats(request):
+    if request.user.is_authenticated and request.user.is_staff:
+        classes = Classe.objects.all()
+        data = []
+        for c in classes:
+            clst = classement(c)
+            data.append({"nom":c.nom, "classement":clst})
+        return render(request, "admin_resultats.html", {"classes":data,
+                                                       'stats':getStats(request.user.etudiant)})
+    else:
+        redirect("accueil");
+
+def adminViewEpreuves(request):
+    if request.user.is_authenticated and request.user.is_staff:
+        domaines = Domaine.objects.all()
+        return render(request, "admin_epreuves.html", {"domaines":domaines})
+    else:
+        redirect("accueil");
+
+
+def adminViewEtudiants(request):
+    if request.user.is_authenticated and request.user.is_staff:
+        classes = Classe.objects.all()
+        return render(request, "admin_etudiants.html", {"classes":classes})
+    else:
+        redirect("accueil");
+
+
 def getListeEpreuves(id_domaine, etudiant):
     chapitres = Chapitre.objects.filter(domaine_id=id_domaine).order_by("numero")
     if not etudiant.classe.spe:
@@ -158,6 +187,19 @@ def epreuveView(request, id_epreuve):
     else:
         return redirect('login')
 
+
+def adminViewEditEpreuve(request, id_epreuve):
+    if request.user.is_authenticated and request.user.is_staff:
+        if request.method == 'GET':
+            epreuve = Epreuve.objects.get(id=id_epreuve)
+            return render(request, 'edit_epreuve.html', {'epreuve':epreuve})
+        elif request.method == 'POST':
+            res = majEpreuve(request.body, id_epreuve)
+            return HttpResponse(json.dumps({'resultat':res}), content_type="application/json")
+    else:
+        return redirect('login')
+
+
 def profileView(request, id_etudiant):
     if request.user.is_authenticated:
         user = request.user
@@ -206,6 +248,23 @@ def soumissionReponse(request, id_epreuve):
         return redirect('accueil')
 
 
+# Reçoit une epreuve mise à jour et l'enregistre
+def majEpreuve(data, id_epreuve):
+    epreuve = Epreuve.objects.get(id=id_epreuve)
+    if epreuve is not None:
+        e = json.loads(data)
+        epreuve.titre = e["titre"]
+        epreuve.etoiles = int(e["etoiles"])
+        epreuve.enonce = e['enonce']
+        epreuve.dataFunc = e['dataFunc']
+        epreuve.testFunc = e['testFunc']
+        epreuve.solution = e['solution']
+        epreuve.save()
+        return True
+    return False
+
+
+# renvoie la liste des étudiants ayant validé une épreuve au format JSON
 def validePar(request, id_epreuve):
     if request.user.is_authenticated:
         etudiant = request.user.etudiant
@@ -219,6 +278,90 @@ def validePar(request, id_epreuve):
                 })
         return HttpResponse(json.dumps(etudiants), content_type="application/json")
 
+# Renvoie la liste des classes au format JSON
+def listeClasses(request):
+    if request.user.is_authenticated and request.user.is_staff:
+        classes = Classe.objects.all()
+        classesData = []
+        for c in classes:
+            classesData.append({
+                "nom":c.nom,
+                "id":c.id
+                })
+        return HttpResponse(json.dumps(classesData), content_type="application/json")
+
+# Renvoie la liste des étudiants au format JSON
+def listeEtudiants(request, id_classe):
+    if request.user.is_authenticated and request.user.is_staff:
+        etudiants = Etudiant.objects.filter(classe__id=id_classe)
+        etudiantsData = []
+        for e in etudiants:
+            etudiantsData.append({
+                "nom":e.user.last_name,
+                "prenom":e.user.first_name,
+                "id":e.id
+                })
+        return HttpResponse(json.dumps(etudiantsData), content_type="application/json")
+
+# Renvoie les données d'un étudiant au format JSON
+def getEtudiant(request, id_etudiant):
+    if request.user.is_authenticated and request.user.is_staff:
+        etudiant = Etudiant.objects.get(id=id_etudiant)
+        data = {}
+        data["id"] = etudiant.id
+        data["nom"] = etudiant.user.last_name
+        data["prenom"] = etudiant.user.first_name
+        data["email"] = etudiant.user.email
+        data["username"] = etudiant.user.username
+        data["classe"] = etudiant.classe.id
+
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+# Renvoie la liste des domaines au format JSON
+def listeDomaines(request):
+    if request.user.is_authenticated and request.user.is_staff:
+        domaines = Domaine.objects.all()
+        domainesData = []
+        for d in domaines:
+            domainesData.append({
+                "nom":d.nom,
+                "nom_affiche":d.nom_affiche,
+                "numero":d.numero,
+                "description":d.description,
+                "id":d.id
+                })
+        return HttpResponse(json.dumps(domainesData), content_type="application/json")
+
+# Renvoie la liste des épreuves au format JSON
+def listeEpreuves(request, id_domaine):
+    if request.user.is_authenticated and request.user.is_staff:
+        epreuves = Epreuve.objects.filter(domaine__id=id_domaine)
+
+        chapitres = Chapitre.objects.filter(domaine__id=id_domaine)
+        data = []
+        for c in chapitres:
+            d = {"chapitre":c.id}
+            epreuves = Epreuve.objects.filter(chapitre=c).order_by("etoiles")
+            epreuvesData = []
+            for e in epreuves:
+                epreuvesData.append({"titre":e.titre, "id":e.id})
+            d['epreuves'] = epreuvesData
+            data.append(d)
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+# Renvoie les données d'une épreuve au format JSON
+def getEpreuve(request, id_epreuve):
+    if request.user.is_authenticated and request.user.is_staff:
+        epreuve = Epreuve.objects.get(id=id_epreuve)
+        data = {}
+        data["titre"] = epreuve.titre
+        data["domaine"] = epreuve.domaine.id
+        data["chapitre"] = epreuve.chapitre.id
+        data["etoiles"] = epreuve.etoiles
+        data["enonce"] = epreuve.enonce
+        data["testFunc"] = epreuve.testFunc
+        data["solution"] = epreuve.solution
+        return HttpResponse(json.dumps(data), content_type="application/json")
 
 def scoreEtudiant(etudiant):
     res = Succes.objects.filter(etudiant=etudiant).aggregate(score=Sum("epreuve__etoiles"))['score']

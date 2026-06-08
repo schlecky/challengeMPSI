@@ -15,7 +15,12 @@
 {% for e in c.epreuves %}
 <tr>
   <td class="resultat">{% if e.reussi %} <i class="fa-solid fa-check"></i> {% else %} <i class="fa-solid fa-xmark"></i> {% endif %}</td>
-  <td><a class="epreuve" href="/epreuve/{{ e.id }}/">{{ e.titre }}</a></td> 
+  <td>
+    <a class="epreuve" href="/epreuve/{{ e.id }}/">{{ e.titre }}</a>
+    {% if user.is_staff %}
+      <a class="lienEdit" href="/administration/editEpreuve/{{ e.id }}/"><i class="fa-solid fa-pen-to-square"></i></a>
+    {% endif %}
+  </td> 
   <td class="liste_pts">{{ e.etoiles }}<i class="fa fa-star smaller"></i></td>
   <td class="liste_val" onclick="dispValidation({{ e.id }})">
     <div class="bar_container">
@@ -40,6 +45,9 @@
 </script>
 {% endfor %}
 </table>
+    {% if user.is_staff %}
+    <a class="lienAjoutEpreuve" href="/administration/addEpreuve/"><i class="fa-regular fa-square-plus"></i></a>
+    {% endif %}
 {% endfor %}
 </div>
 
@@ -66,7 +74,6 @@
       };
 
       async function dispValidation(eid){
-        console.log("Affichage des validations")
         try {
           const response = await fetch("/valide_par/"+eid+"/");
           if (!response.ok) {
