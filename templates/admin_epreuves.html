@@ -1,0 +1,41 @@
+{% extends "administration.html" %}
+
+{% block admin_contenu %} 
+
+<div id="adminListeDomaines">
+  <ul>
+  {% for d in domaines %}
+  <li><a onclick="selectDomaine({{ d.id }})">{{ d.nom }}</a></li>
+  {% endfor %}
+  </ul>
+</div>
+<div id="adminListeEpreuvesDiv">
+ <ul id="adminListeEpreuvesUl">
+ </ul> 
+</div>
+<script>
+  $("#lien_epreuves").addClass("selected");
+  async function selectDomaine(did){
+    try {
+      const response = await fetch("/api/epreuves/"+did+"/");
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const result = await response.json();
+      ul = $("#adminListeEpreuvesUl");
+      ul.empty();
+      html_content = ""
+      console.log(result)
+      for (let chapitre of result){
+        for (let e of chapitre['epreuves']){
+          html_content += "<li><a>"+e['titre']+"</a></li>\n";
+        }
+      }
+      ul.html(html_content);
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+</script>
+
+{% endblock %} <!-- contenu -->
