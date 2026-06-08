@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block contenu %}
+<script src="{% static 'js/js.cookie.min.js' %}"></script>
+<section class="section_edit_epreuve">
+  <div>
+    <p><span>Titre</span></p><input type="text" id="inputTitre" value="{{ epreuve.titre|safe }}"></input>
+  </div>
+  <div>
+    <span>Etoiles</span><input type="number"  id="inputEtoiles" value={{ epreuve.etoiles }}></input>
+  </div>
+  <div id="block_enonce" class="block">
+<p><span>Enonce</span></p>
+  <div id=enonce_container class="editContainer">
+    <textarea id="id_enonce">{{ epreuve.enonce|safe }}</textarea>
+
+    <div id="enonce_preview" class="preview">
+    </div>
+  </div>
+</div>
+  <div id="block_dataFunc" class="block">
+    <p><span>dataFunc</span></p><textarea id="id_dataFunc">{{ epreuve.dataFunc|safe }}</textarea></input>
+  </div>
+  <div id="block_testFunc" class="block">
+    <p><span>testFunc</span></p><textarea id="id_testFunc">{{ epreuve.testFunc|safe }}</textarea></input>
+  </div>
+  <div id="block_solution" class="block">
+    <p><span>Solution</span></p>
+    <div id=solution_containe class="editContainer">
+    <textarea id="id_solution">{{ epreuve.solution|safe }}</textarea>
+    <div id="solution_preview" class="preview">
+    </div>
+  </div>
+
+  <div id="editEnonceBtn" class=btn onclick="submit()">
+    Enregistrer
+  </div>
+</section>
+
+<script src="/static/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+  let editorEnonce = null;
+  let editorData = null;
+  let editorSolution = null
+  let editorTest = null
+  window.onload = function(){
+    var divEditorEnonce = document.createElement('div');
+    divEditorEnonce.id="editorEnonce";
+    var textareaEnonce = document.getElementById("id_enonce");
+    textareaEnonce.parentNode.insertBefore(divEditorEnonce,textareaEnonce.nextSibling);
+    textareaEnonce.style = "display: none"
+    editorEnonce = ace.edit("editorEnonce");
+    console.log(editorEnonce)
+
+    editorEnonce.setTheme("ace/theme/clouds");
+    editorEnonce.getSession().setMode("ace/mode/html");
+    editorEnonce.session.setUseWrapMode(true);
+    editorEnonce.setValue(textareaEnonce.value);
+    editorEnonce.clearSelection();
+    
+    editorEnonce.session.on("change", function(delta){
+      $("#enonce_preview").html(editorEnonce.getValue());
+      MathJax.typeset();
+    });
+    $("#enonce_preview").html(editorEnonce.getValue());
+    MathJax.typeset();
+
+
+    var divEditorData = document.createElement('div');
+    divEditorData.id="editorData";
+    var textareaData = document.getElementById("id_dataFunc");
+    textareaData.parentNode.insertBefore(divEditorData,textareaData.nextSibling);
+    textareaData.style = "display: none"
+    editorData = ace.edit("editorData");
+
+    editorData.setTheme("ace/theme/clouds");
+    editorData.getSession().setMode("ace/mode/python");
+    editorData.session.setUseWrapMode(true);
+    editorData.setValue(textareaData.value);
+    editorData.clearSelection();
+
+
+    var divEditorTest = document.createElement('div');
+    divEditorTest.id="editorTest";
+    var textareaTest = document.getElementById("id_testFunc");
+    textareaTest.parentNode.insertBefore(divEditorTest,textareaTest.nextSibling);
+    textareaTest.style = "display: none"
+    editorTest = ace.edit("editorTest");
+
+    editorTest.setTheme("ace/theme/clouds");
+    editorTest.getSession().setMode("ace/mode/python");
+    editorTest.session.setUseWrapMode(true);
+    editorTest.setValue(textareaTest.value);
+    editorTest.clearSelection();
+
+    var divEditorSolution = document.createElement('div');
+    divEditorSolution.id="editorSolution";
+    var textareaSolution = document.getElementById("id_solution");
+    textareaSolution.parentNode.insertBefore(divEditorSolution,textareaSolution.nextSibling);
+    textareaSolution.style = "display: none"
+    editorSolution = ace.edit("editorSolution");
+
+    editorSolution.setTheme("ace/theme/clouds");
+    editorSolution.getSession().setMode("ace/mode/html");
+    editorSolution.session.setUseWrapMode(true);
+    editorSolution.setValue(textareaSolution.value);
+    editorSolution.clearSelection();
+
+    editorSolution.session.on("change", function(delta){
+      $("#solution_preview").html(editorSolution.getValue());
+      MathJax.typeset();
+    });
+    $("#solution_preview").html(editorSolution.getValue());
+    MathJax.typeset();
+
+    function copyCode(){
+      textareaData.value = editorData.getSession().getValue();
+      textareaTest.value = editorTest.getSession().getValue();
+      textareaEnonce.value = editorEnonce.getSession().getValue();
+      textareaSolution.value = editorSolution.getSession().getValue();
+    }
+  }
+
+  function submit(){
+    console.log("submit");
+    let data = {};
+    data['titre'] = $('#inputTitre').val();
+    data['etoiles'] = $('#inputEtoiles').val();
+    data['enonce'] = editorEnonce.getValue();
+    data['dataFunc'] = editorData.getValue();
+    data['testFunc'] = editorTest.getValue();
+    data['solution'] = editorSolution.getValue();
+
+    $.ajax({
+      url:"/administration/editEpreuve/{{ epreuve.id }}/",
+      data:JSON.stringify(data),
+      method:'POST',
+      headers: {'X-CSRFToken': Cookies.get("csrftoken")},
+    }).done(function(data){
+      clearTimeout(timeout)
+    })
+    event.preventDefault();
+  }
+
+//    form = document.getElementById("epreuve_form");
+//    form.setAttribute("onsubmit","copyCode()");
+</script>
+{% endblock %}
+
