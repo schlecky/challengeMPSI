@@ -41,6 +41,7 @@ urlpatterns = [
     path(r'api/epreuves/<int:id_domaine>/', views.listeEpreuves, name='listeEpreuves'),
     path(r'api/epreuve/<int:id_epreuve>/', views.getEpreuve, name='getEpreuve'),
     path(r'api/images/<int:id_domaine>/', views.getImages, name='getImages'),
+    path(r'api/uploadimage/<int:id_domaine>/', views.uploadImage, name='uploadImage'),
 
 
 

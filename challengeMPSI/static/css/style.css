@@ -17,7 +17,7 @@ header{
   box-shadow:0 1px 1px rgba(0,0,0,0.07);
   box-sizing: border-box;
   background-color:white;
-  z-index: 99;
+  z-index: 999;
 }
 
 header a{
@@ -123,7 +123,7 @@ li.domaine{
 
 #description_domaine ul{
   /*! font-size: small; */
-  /*! padding-left: 20px; */
+  padding-left: 30px;
   list-style-type: "\25B6\2000";
   margin-top:5px;
 }
@@ -166,7 +166,7 @@ li.domaine{
 #classement{
   position:fixed;
   right:0px;
-  top:0px;
+  top:70px;
   bottom:0px;
   width:300px;
   background-color: white;
@@ -230,7 +230,7 @@ tr:not(thead tr):hover {
 
 #score{
   font-size:smaller;
-  border:solid 1px white;
+  border:solid 1px whiSupprimerte;
   text-align:center;
   cursor:pointer;
   width:200px;
@@ -261,7 +261,10 @@ tr:not(thead tr):hover {
   margin-top:20px;
   padding:20px;
   box-sizing: border-box;
+}
 
+#liste_epreuves td{
+  padding:2px;
 }
 
 #titre_liste h2{
@@ -355,10 +358,10 @@ i.fa-xmark{
 
 td{
   position:relative;
-  line-height:1.5rem
+  line-height:1.5rem;
 }
 
-.resultat{
+table td.resultat{
   text-align:center;
   width: 20px;
 }
@@ -456,7 +459,6 @@ h1.nom_profil{
   border:solid 1px gray;
   height:300px;
   vertical-align: bottom;
-  //padding:20px;
   padding-top:0px;
   background:white;
   position:relative;
@@ -475,7 +477,6 @@ h1.nom_profil{
   margin-top:10px;
   margin-bottom:10px;
   width:80%;
-  vertical-align: bottom;
   border-bottom:solid 1px gray;
   padding-bottom:10px;
 }
@@ -540,7 +541,7 @@ h1.nom_profil{
 }
 
 .tooltip .tooltiptext {
-  //visibility: hidden;
+  visibility: hidden;
   width: 120px;
   background-color: gray;
   color: #fff;
@@ -702,8 +703,16 @@ div {
   height:300px;
 }
 
-.section_edit_epreuve  input{
-  width:100%;
+.section_edit_epreuve #inputTitre{
+  width:50%;
+  display:inline;
+  margin-left:10px;
+  margin-right:50px;
+}
+
+.section_edit_epreuve #inputEtoiles{
+  width:50px;
+  display:inline;
 }
 
 #editorData, #editorTest, #editorEnonce, #editorSolution {
@@ -731,8 +740,8 @@ div {
 
 .editContainer{
   display:flex;
-  align-items: center;
-  justify-content:center;
+  align-items: flex-start;
+  justify-content:space-between;
 }
 
 .block{
@@ -743,20 +752,32 @@ div {
 
 
 #editEpreuveBtns{
-  position:fixed;
-    bottom:20px;
-   left:20px;
 }
+
+
 
 .btn{
   cursor:pointer;
-  display:block;
+  display:inline-block;
   padding:6px;
   margin-bottom:5px;
   border-radius:6px;
   color:white;
   z-index:99;
+  background:#555;
+  min-height: 20px;
+  min-width: 20px;
 }
+
+.btn:hover{
+  filter:brightness(140%)
+}
+
+.selected{
+  background:#123445;
+}
+
+
 
 .btnOk{
   border: solid 1px #2FA084;
@@ -781,9 +802,77 @@ div {
   margin-right:10px;
 }
 
-#supprConfirm{
+.colle{
+  display:inline-block;
+  width:80px;
+  border-radius:0px;
+  margin:0px;
+}
+
+.colle:not(:first-child){
+  border-left:solid 1px white;
+}
+
+.colle:last-child{
+  border-radius:0px 5px 5px 0px;
+}
+.colle:first-child{
+  border-radius:5px 0px 0px 5px;
+}
+
+#editeur{
+  padding:0px;
+  margin-left:0px;
+  margin-top:10px;
+  border:solid 1px gray;
+  height:300px;
+  width:55%;
+}
+
+#div_images{
+  width:80%;
+  display:inline-block;
+  height:80vh;
+  position:fixed;
+  background:white;
+  z-index:100;
+  left:10%;
+  border:solid 1px;
+}
+
+#div_images img{
+  border:solid 1px black;
+}
+
+#drop-area-container{
   position:absolute;
-  width:200px;
-  right:0px;;
-  top:-0px;
+  bottom:0px;
+  height:40px;
+  width:100%;
+  text-align:center;
+  font-size:35px;
+  color:#DDD;
+}
+
+#drop-area-container i{
+  cursor:pointer;
+  color:#DDD;
+}
+
+#drop-area-container i:hover{
+  color:#AAA;
+}
+
+#btnsTools{
+  display:inline-block;
+  margin-left:30px;
+}
+
+#btnImage{
+  position:relative;
+  height:100%;
+}
+
+#btnsEditeur{
+  display:inline-block;
 }

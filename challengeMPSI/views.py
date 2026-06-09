@@ -1,4 +1,5 @@
 from django.http import HttpResponse, JsonResponse
+from django.core.files.base import ContentFile
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
@@ -6,12 +7,14 @@ from django.template import engines, TemplateSyntaxError
 from django.template.loader import get_template
 from django.db.models import Max, Sum, Count, Q, F, Value, Func, IntegerField
 from django.urls import reverse
+
 from .models import Epreuve, Etudiant, Succes, Domaine, Chapitre, Classe, Image
 import random as rd
 import numpy as np
 import datetime as dt
 import time
 import json
+import base64
 
 def accueilView(request):
     if request.user.is_authenticated:
@@ -196,10 +199,25 @@ def getImages(request, id_domaine):
             for i in images:
                 data.append({
                     'name':i.image.name,
-                    'path':i.image.path
+                    'url':i.image.url
                     })
-            
             return HttpResponse(json.dumps(data), content_type="application/json")
+
+def uploadImage(request, id_domaine):
+    if request.user.is_authenticated and request.user.is_staff:
+        if request.method == 'POST':
+            print(request.body)
+            data = json.loads(request.body)
+            filename = data['filename']
+            imageData = data['file']
+            image = Image.objects.create(imageDomaine = Domaine.objects.get(id=id_domaine))
+            image.image.save(
+                    filename,
+                    ContentFile(base64.b64decode(imageData)),
+                    save=True       
+                    )
+            return HttpResponse("{\"resultat\":true}", content_type="application/json")
+
 
 
 

@@ -27,7 +27,6 @@
       <span class="validations-bar" style="width:{{ e.validations_pc }}%">{{ e.validations_pc }}%</span>
     </div>
     <span class="validation_num">{{ e.validations }}</span> </td>
-</tr>
 <script>
   $(".validations-bar").each(function(index){
     val = parseInt($(this).text().replace("\%",""))
@@ -43,6 +42,7 @@
     }
   });
 </script>
+</tr>
 {% endfor %}
 </table>
     {% if user.is_staff %}

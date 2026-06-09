@@ -3,135 +3,106 @@
 
 {% block contenu %}
 <script src="{% static 'js/js.cookie.min.js' %}"></script>
-<section class="section_edit_epreuve">
+<div id="div_images" onclick="$('#div_images').hide()">
+  <div id="image-container">
+  </div>
+<div id=drop-area-container>
+<div id=drop-area onclick=importImage()>
+    <i class="fa-solid fa-cloud-arrow-up"></i>
+</div></div>
+</div>
+<section id="section_edit_epreuve">
   <div>
     <p><a href="/domaine/{{ epreuve.chapitre.domaine.id }}/">Retour</a></p>
-    <p><span>Titre</span></p><input type="text" id="inputTitre" value="{{ epreuve.titre|safe }}"></input>
-  </div>
-  <div>
+    <span>Titre</span><input type="text" id="inputTitre" value="{{ epreuve.titre|safe }}"></input>
     <span>Etoiles</span><input type="number"  id="inputEtoiles" value={{ epreuve.etoiles }}></input>
   </div>
-  <div id="block_enonce" class="block">
-<p><span>Enonce</span></p>
-  <div id=enonce_container class="editContainer">
-    <textarea id="id_enonce">{{ epreuve.enonce|safe }}</textarea>
-
-    <div id="enonce_preview" class="preview">
-    </div>
-  </div>
-</div>
-  <div id="block_dataFunc" class="block">
-    <p><span>dataFunc</span></p><textarea id="id_dataFunc">{{ epreuve.dataFunc|safe }}</textarea></input>
-  </div>
-  <div id="block_testFunc" class="block">
-    <p><span>testFunc</span></p><textarea id="id_testFunc">{{ epreuve.testFunc|safe }}</textarea></input>
-  </div>
-  <div id="block_solution" class="block">
-    <p><span>Solution</span></p>
-    <div id=solution_containe class="editContainer">
-    <textarea id="id_solution">{{ epreuve.solution|safe }}</textarea>
-    <div id="solution_preview" class="preview">
+  <div id="blockediteur" class="block">
+    <nav>
+      <div id="btnsEditeur">
+        <div id="btnEnonce" class="btn colle" onclick="selectEnonce()">
+          Enoncé
+        </div><div id="btnData"  class="btn colle" onclick="selectData()">
+          Data
+        </div><div id="btnTest" class="btn colle" onclick="selectTest()">
+          Test
+        </div><div id="btnSolution" class="btn colle" onclick="selectSolution()">
+          Solution
+        </div>
+      </div>
+      <div id="btnsTools">
+        <div id="btnImage" class="btn" onclick="showImages()"> 
+          Insérer image
+        </div>
+      </div>
+    </nav>
+    <div id=editeur_container class="editContainer">
+      <div id="editeur"></div>
+      <div id="preview" class="preview"></div>
     </div>
   </div>
 
   <div id=editEpreuveBtns>
-  <div id="editEpreuveeBtnEnregistrer" class="btn btnOk" onclick="submit()">
-    Enregistrer
-  </div>
-  <div id="editEpreuveBtnSupprimer" class="btn btnDanger" onclick='$("#supprConfirm").show()'>
-    Supprimer
-  </div>
-  <div id="supprConfirm">
-    <div id="editEpreuveBtnSupprimerAnnul" class="btn btnOk" onclick='$("#supprConfirm").hide()'>Annuler suppression</div>
-    <div id="editEpreuveBtnSupprimerConf" class="btn btnDanger" onclick="supprEpreuve()">Confirmer suppression</div>
-  </div>
+    <div id="editEpreuveeBtnEnregistrer" class="btn btnOk" onclick="submit()">
+      Enregistrer
+    </div>
+    <div id="editEpreuveBtnSupprimer" class="btn btnDanger" onclick='$("#supprConfirm").show();$("#editEpreuveBtnSupprimer").hide()'>
+      Supprimer
+    </div>
+    <div id="supprConfirm">
+      <div id="editEpreuveBtnSupprimerAnnul" class="btn btnOk" onclick='$("#supprConfirm").hide();$("#editEpreuveBtnSupprimer").show()'>Annuler suppression</div>
+      <div id="editEpreuveBtnSupprimerConf" class="btn btnDanger" onclick="supprEpreuve()">Confirmer suppression</div>
+    </div>
   </div>
 </section>
 
 <script src="/static/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
-  let editorEnonce = null;
-  let editorData = null;
-  let editorSolution = null
-  let editorTest = null
+  let sesEnonce = null;
+  let sesData = null;
+  let sesSolution = null
+  let sesTest = null
   window.onload = function(){
-    var divEditorEnonce = document.createElement('div');
-    divEditorEnonce.id="editorEnonce";
-    var textareaEnonce = document.getElementById("id_enonce");
-    textareaEnonce.parentNode.insertBefore(divEditorEnonce,textareaEnonce.nextSibling);
-    textareaEnonce.style = "display: none"
-    editorEnonce = ace.edit("editorEnonce");
-    console.log(editorEnonce)
+    $('#div_images').hide();
 
-    editorEnonce.setTheme("ace/theme/clouds");
-    editorEnonce.getSession().setMode("ace/mode/html");
-    editorEnonce.session.setUseWrapMode(true);
-    editorEnonce.setValue(textareaEnonce.value);
-    editorEnonce.clearSelection();
-    
-    editorEnonce.session.on("change", function(delta){
-      $("#enonce_preview").html(editorEnonce.getValue());
+    var divEditeur = document.createElement('editeur');
+    editor = ace.edit("editeur");
+    editor.setTheme("ace/theme/clouds");
+
+    sesEnonce = ace.createEditSession("{{ epreuve.enonce | escapejs }}");
+    sesEnonce.setMode("ace/mode/html");
+    sesEnonce.setUseWrapMode(true);
+
+    sesData = ace.createEditSession("{{ epreuve.dataFunc | escapejs}}");
+    sesData.setMode("ace/mode/python");
+    sesData.setUseWrapMode(true);
+
+    sesSolution = ace.createEditSession("{{ epreuve.solution | escapejs}}");
+    sesSolution.setMode("ace/mode/html");
+    sesSolution.setUseWrapMode(true);
+
+    sesTest = ace.createEditSession("{{ epreuve.testFunc | escapejs}}");
+    sesTest.setMode("ace/mode/python");
+    sesTest.setUseWrapMode(true);
+
+    editor.clearSelection();
+
+    sesEnonce.on("change", function(delta){
+      $("#preview").html(sesEnonce.getValue());
       MathJax.typeset();
     });
-    $("#enonce_preview").html(editorEnonce.getValue());
-    MathJax.typeset();
 
-
-    var divEditorData = document.createElement('div');
-    divEditorData.id="editorData";
-    var textareaData = document.getElementById("id_dataFunc");
-    textareaData.parentNode.insertBefore(divEditorData,textareaData.nextSibling);
-    textareaData.style = "display: none"
-    editorData = ace.edit("editorData");
-
-    editorData.setTheme("ace/theme/clouds");
-    editorData.getSession().setMode("ace/mode/python");
-    editorData.session.setUseWrapMode(true);
-    editorData.setValue(textareaData.value);
-    editorData.clearSelection();
-
-
-    var divEditorTest = document.createElement('div');
-    divEditorTest.id="editorTest";
-    var textareaTest = document.getElementById("id_testFunc");
-    textareaTest.parentNode.insertBefore(divEditorTest,textareaTest.nextSibling);
-    textareaTest.style = "display: none"
-    editorTest = ace.edit("editorTest");
-
-    editorTest.setTheme("ace/theme/clouds");
-    editorTest.getSession().setMode("ace/mode/python");
-    editorTest.session.setUseWrapMode(true);
-    editorTest.setValue(textareaTest.value);
-    editorTest.clearSelection();
-
-    var divEditorSolution = document.createElement('div');
-    divEditorSolution.id="editorSolution";
-    var textareaSolution = document.getElementById("id_solution");
-    textareaSolution.parentNode.insertBefore(divEditorSolution,textareaSolution.nextSibling);
-    textareaSolution.style = "display: none"
-    editorSolution = ace.edit("editorSolution");
-
-    editorSolution.setTheme("ace/theme/clouds");
-    editorSolution.getSession().setMode("ace/mode/html");
-    editorSolution.session.setUseWrapMode(true);
-    editorSolution.setValue(textareaSolution.value);
-    editorSolution.clearSelection();
-
-    editorSolution.session.on("change", function(delta){
-      $("#solution_preview").html(editorSolution.getValue());
+    sesSolution.on("change", function(delta){
+      $("#preview").html(sesSolution.getValue());
       MathJax.typeset();
     });
-    $("#solution_preview").html(editorSolution.getValue());
-    MathJax.typeset();
 
-    function copyCode(){
-      textareaData.value = editorData.getSession().getValue();
-      textareaTest.value = editorTest.getSession().getValue();
-      textareaEnonce.value = editorEnonce.getSession().getValue();
-      textareaSolution.value = editorSolution.getSession().getValue();
-    }
+    editor.setSession(sesEnonce);
+    $("#preview").html(sesEnonce.getValue());
+    MathJax.typeset();
 
     $("#supprConfirm").hide();
+    selectEnonce();
   }
 
   function submit(){
@@ -139,10 +110,10 @@
     let data = {};
     data['titre'] = $('#inputTitre').val();
     data['etoiles'] = $('#inputEtoiles').val();
-    data['enonce'] = editorEnonce.getValue();
-    data['dataFunc'] = editorData.getValue();
-    data['testFunc'] = editorTest.getValue();
-    data['solution'] = editorSolution.getValue();
+    data['enonce'] = sesEnonce.getValue();
+    data['dataFunc'] = sesData.getValue();
+    data['testFunc'] = sesTest.getValue();
+    data['solution'] = sesSolution.getValue();
 
     $.ajax({
       url:"/administration/editEpreuve/{{ epreuve.id }}/",
@@ -170,8 +141,102 @@
     });
   }
 
-//    form = document.getElementById("epreuve_form");
-//    form.setAttribute("onsubmit","copyCode()");
+  function selectEnonce(){
+    editor.setSession(sesEnonce);
+    $("#blockediteur .btn").removeClass("selected");
+    $("#btnEnonce").addClass("selected");
+  }
+  function selectSolution(){
+    editor.setSession(sesSolution);
+    $("#blockediteur .btn").removeClass("selected");
+    $("#btnSolution").addClass("selected");
+  }
+  function selectData(){
+    editor.setSession(sesData);
+    $("#blockediteur .btn").removeClass("selected");
+    $("#btnData").addClass("selected");
+  }
+  function selectTest(){
+    editor.setSession(sesTest);
+    $("#blockediteur .btn").removeClass("selected");
+    $("#btnTest").addClass("selected");
+  }
+
+  function showImages(){
+    $("#div_images").show();
+    $.ajax({
+      url:"/api/images/{{ epreuve.chapitre.domaine.id }}/",
+      method:'GET',
+      headers: {'X-CSRFToken': Cookies.get("csrftoken")},
+      success: function(data){
+        html = "";
+        for(const i of data){
+          html += "<img src="+i.url+" onclick=\"useImage(this)\" width=100px></img><br/>";
+        }
+        $("#image-container").html(html);
+        
+      }
+    })
+  }
+
+  function useImage(img){
+    var el = document.createElement('a');
+    el.href = img.src
+    $("#div_images").hide();
+    editor.session.insert(editor.getCursorPosition(), "<div class=\"figure\"><img src=\""+el.pathname+"\"> </img></div>")
+  }
+
+  function arrayBufferToBase64( buffer ) {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa( binary );
+  }
+
+  let uploadFilename = null;
+
+  function importImage() {
+    let input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = _ => {
+      // you can use this method to get file and perform respective operations
+      let files =   Array.from(input.files);
+      uploadFile(files[0]);
+    };
+    input.click();
+  }
+
+  function fileLoaded(event){
+    file = arrayBufferToBase64(event.target.result);
+    filename = uploadFilename;
+  
+    $.ajax({
+      url:"/api/uploadimage/{{ epreuve.chapitre.domaine.id }}/",
+      method:'POST',
+      headers: {'X-CSRFToken': Cookies.get("csrftoken")},
+      data:JSON.stringify({
+        "filename":filename,
+        "file":file
+      }),
+      success: function(data){
+        showImages()          
+      }
+    })
+  }
+
+  function uploadFile(file){
+    uploadFilename = file.name;
+    const reader = new FileReader();
+    reader.addEventListener('load', fileLoaded);
+    reader.readAsArrayBuffer(file);
+  }
+
+
+  //    form = document.getElementById("epreuve_form");
+  //    form.setAttribute("onsubmit","copyCode()");
 </script>
 {% endblock %}
 
