@@ -967,3 +967,8 @@ div {
     transform: rotate(360deg);
   }
 }
+
+#chargement_python{
+  width:100%;
+  text-align:center;
+}
