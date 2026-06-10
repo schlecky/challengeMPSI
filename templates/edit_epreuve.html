@@ -3,6 +3,14 @@
 
 {% block contenu %}
 <script src="{% static 'js/js.cookie.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v314.0.0/full/pyodide.js"></script>
+
+<div id=overlay_loading>
+  <div class=loader>
+    
+  </div>
+</div>
+
 <div id="div_images" onclick="$('#div_images').hide()">
   <div id="image-container">
   </div>
@@ -62,6 +70,23 @@
   let sesData = null;
   let sesSolution = null
   let sesTest = null
+
+  let pyodide = null
+
+  let data = {}
+
+  async function load_pyodide(){
+        pyodide = await loadPyodide();
+        await pyodide.loadPackage("numpy");
+        pyodide.runPython("import numpy as np");
+        pyodide.runPython("import numpy.random as rd");
+        $("#overlay_loading").hide();
+        updateData();
+        updateEnonce();
+  }
+
+  load_pyodide();
+
   window.onload = function(){
     $('#div_images').hide();
 
@@ -88,18 +113,19 @@
     editor.clearSelection();
 
     sesEnonce.on("change", function(delta){
-      $("#preview").html(sesEnonce.getValue());
-      MathJax.typeset();
+      updateEnonce();
     });
 
     sesSolution.on("change", function(delta){
-      $("#preview").html(sesSolution.getValue());
-      MathJax.typeset();
+      updateSolution();
+    });
+
+    sesData.on("change", function(delta){
+      updateData();
     });
 
     editor.setSession(sesEnonce);
-    $("#preview").html(sesEnonce.getValue());
-    MathJax.typeset();
+    updateEnonce();
 
     $("#supprConfirm").hide();
     selectEnonce();
@@ -141,25 +167,60 @@
     });
   }
 
+  function updateEnonce(){
+      $("#preview").html(sesEnonce.getValue());
+    for(const [key, value] of Object.entries(data)){
+        $("#preview #"+key).html(value.toLocaleString(undefined,
+ {'minimumFractionDigits':0,'maximumFractionDigits':6}))
+      }
+      MathJax.typeset();
+  }
+  function updateSolution(){
+      $("#preview").html(sesSolution.getValue());
+      MathJax.typeset();
+  }
+  function updateData(){
+      $("#preview").html("");
+      pyodide.runPython(sesData.getValue());
+      pyodide.runPython("data = dataFunc(0)");
+      output  =""
+      data = {};
+      for(const key of Object.keys(pyodide.globals.data)){
+        data[key] = pyodide.globals.data[key];
+        output += key + " : " + pyodide.globals.data[key] + "</br>";
+      }
+      $("#preview").html(output);
+    
+      
+      
+  }
+  function updateTest(){
+      $("#preview").html("");
+  }
+
   function selectEnonce(){
     editor.setSession(sesEnonce);
     $("#blockediteur .btn").removeClass("selected");
     $("#btnEnonce").addClass("selected");
+    updateEnonce();
   }
   function selectSolution(){
     editor.setSession(sesSolution);
     $("#blockediteur .btn").removeClass("selected");
     $("#btnSolution").addClass("selected");
+    updateSolution();
   }
   function selectData(){
     editor.setSession(sesData);
     $("#blockediteur .btn").removeClass("selected");
     $("#btnData").addClass("selected");
+    updateData();
   }
   function selectTest(){
     editor.setSession(sesTest);
     $("#blockediteur .btn").removeClass("selected");
     $("#btnTest").addClass("selected");
+    updateTest();
   }
 
   function showImages(){
