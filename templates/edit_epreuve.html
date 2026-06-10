@@ -181,8 +181,13 @@
   }
   function updateData(){
       $("#preview").html("");
-      pyodide.runPython(sesData.getValue());
-      pyodide.runPython("data = dataFunc(0)");
+      try{
+        pyodide.runPython(sesData.getValue());
+        pyodide.runPython("data = dataFunc(0)");
+      } catch (error) {
+        $("#preview").html(error);
+        return
+      }
       output  =""
       data = {};
       for(const key of Object.keys(pyodide.globals.data)){
@@ -190,9 +195,6 @@
         output += key + " : " + pyodide.globals.data[key] + "</br>";
       }
       $("#preview").html(output);
-    
-      
-      
   }
   function updateTest(){
       $("#preview").html("");
