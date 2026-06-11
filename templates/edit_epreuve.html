@@ -21,6 +21,12 @@
     <i class="fa-solid fa-cloud-arrow-up"></i>
 </div></div>
 </div>
+
+<div class=notification>
+  <div id="btnClose" onclick="hideNotif()"><i class="fa-regular fa-circle-xmark"></i></div>
+  <div id="message"> 
+  </div>
+</div>
 <section id="section_edit_epreuve">
   <div>
     <p><a href="/domaine/{{ epreuve.chapitre.domaine.id }}/">Retour</a></p>
@@ -149,7 +155,13 @@
       method:'POST',
       headers: {'X-CSRFToken': Cookies.get("csrftoken")},
     }).done(function(data){
-      clearTimeout(timeout)
+      if (data['resultat']){
+        showNotif("Sauvegarde réussie");
+        setTimeout(hideNotif,3000); 
+      } else {
+        showNotif("Sauvegarde échouée");
+        setTimeout(hideNotif,3000); 
+      }
     })
     event.preventDefault();
   }
@@ -297,6 +309,14 @@
     const reader = new FileReader();
     reader.addEventListener('load', fileLoaded);
     reader.readAsArrayBuffer(file);
+  }
+
+  function hideNotif(){
+    $(".notification").removeClass("active");
+  }
+  function showNotif(message){
+    $(".notification #message").html(message);
+    $(".notification").addClass("active");
   }
 
 

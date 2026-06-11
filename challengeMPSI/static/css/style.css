@@ -770,7 +770,11 @@ div {
 }
 
 .btn:hover{
-  filter:brightness(140%)
+  filter:brightness(140%);
+}
+
+.btn:active{
+  transform:translate(1px, -1px);
 }
 
 .selected{
@@ -971,4 +975,24 @@ div {
 #chargement_python{
   width:100%;
   text-align:center;
+}
+
+
+.notification{
+  position:fixed;
+  height:50px;
+  bottom:-50px;
+  right:5px;
+  background:#6bad79;
+  padding:10px;
+  border-radius:10px;
+  transition: bottom 300ms;
+}
+
+.notification.active{
+  bottom:10px;
+}
+
+.notification #btnClose{
+  float: right;
 }

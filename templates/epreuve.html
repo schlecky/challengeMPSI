@@ -75,7 +75,12 @@
 </script>
 <section class="section_epreuve">
   <h1><a href=/domaine/{{ epreuve.domaine.id }}>{{ epreuve.domaine }}</a></h1>
-  <h2>{{ epreuve.titre }} {% if valide %}<i class="fa-solid fa-check"></i>{% else %}<i class="fa-solid fa-xmark"></i>{% endif %}</h2>
+  <h2>{{ epreuve.titre }} {% if valide %}<i class="fa-solid fa-check"></i>{% else %}<i class="fa-solid fa-xmark"></i>{% endif %}
+{% if user.is_staff %}
+      <a class="lienEdit" href="/administration/editEpreuve/{{ epreuve.id }}/"><i class="fa-solid fa-pen-to-square"></i></a>
+    {% endif %}
+
+  </h2>
 
 {{ epreuve.enonce|safe }}
 
