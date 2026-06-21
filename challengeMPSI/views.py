@@ -198,6 +198,7 @@ def getImages(request, id_domaine):
             data = []
             for i in images:
                 data.append({
+                    'id': i.id,
                     'name':i.image.name,
                     'url':i.image.url
                     })
@@ -256,6 +257,28 @@ def adminDelEpreuve(request, id_epreuve):
             if epreuve is not None:
                 epreuve.delete()
             return HttpResponse(json.dumps({'resultat':True}), content_type="application/json")
+    else:
+        return redirect('login')
+
+
+def gestClasse(request):
+    if request.user.is_authenticated and request.user.is_staff:
+        if request.method == 'PUT':
+            data = json.loads(request.body)
+            classe = Classe.objects.create()
+            classe.nom = data["nom"]
+            classe.spe = data["spe"]
+            classe.save()
+            return HttpResponse(json.dumps({'resultat':True}), content_type="application/json")
+        elif request.method == 'DELETE':
+            data = json.loads(request.body)
+            classe = Classe.objects.get(id=int(data["id"]))
+            if classe is None:
+                return HttpResponse(json.dumps({'resultat':False, 'message':'Classe non trouvée'}), content_type="application/json")
+            classe.delete()
+            return HttpResponse(json.dumps({'resultat':True}), content_type="application/json")
+        else:
+            return HttpResponse(json.dumps({'resultat':False, 'message':'Méthode HTTP invalide'}), content_type="application/json")
     else:
         return redirect('login')
 
@@ -353,29 +376,60 @@ def listeClasses(request):
 # Renvoie la liste des étudiants au format JSON
 def listeEtudiants(request, id_classe):
     if request.user.is_authenticated and request.user.is_staff:
-        etudiants = Etudiant.objects.filter(classe__id=id_classe)
-        etudiantsData = []
-        for e in etudiants:
-            etudiantsData.append({
-                "nom":e.user.last_name,
-                "prenom":e.user.first_name,
-                "id":e.id
-                })
-        return HttpResponse(json.dumps(etudiantsData), content_type="application/json")
+        if request.method == 'GET':
+            etudiants = Etudiant.objects.filter(classe__id=id_classe)
+            etudiantsData = []
+            for e in etudiants:
+                etudiantsData.append({
+                    "nom":e.user.last_name,
+                    "prenom":e.user.first_name,
+                    "email":e.user.email,
+                    "username":e.user.username,
+                    "id":e.id
+                    })
+            return HttpResponse(json.dumps(etudiantsData), content_type="application/json")
+        elif request.method == 'PUT':
+            dataList = json.loads(request.body)
+            for d in dataList:
+                user = User.objects.create(first_name=d["prenom"], last_name=d["nom"], username=d['login'], email=d['email'])
+                user.save()
+                etudiant = Etudiant.objects.create(user=user, classe=Classe.objects.get(id=d['idClasse']))
+                etudiant.save()
+            return HttpResponse(json.dumps({"resultat":True}), content_type="application/json")
+        else:
+            return HttpResponse(json.dumps({"resultat":False, "message":"Méthode invalide"}), content_type="application/json")
 
 # Renvoie les données d'un étudiant au format JSON
 def getEtudiant(request, id_etudiant):
     if request.user.is_authenticated and request.user.is_staff:
         etudiant = Etudiant.objects.get(id=id_etudiant)
-        data = {}
-        data["id"] = etudiant.id
-        data["nom"] = etudiant.user.last_name
-        data["prenom"] = etudiant.user.first_name
-        data["email"] = etudiant.user.email
-        data["username"] = etudiant.user.username
-        data["classe"] = etudiant.classe.id
+        if etudiant is None:
+            return HttpResponse(json.dumps({'resultat':False, 'message':'Etudiant inconnu'}), content_type="application/json")
 
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        if request.method == 'GET':
+            data = {}
+            data["id"] = etudiant.id
+            data["nom"] = etudiant.user.last_name
+            data["prenom"] = etudiant.user.first_name
+            data["email"] = etudiant.user.email
+            data["username"] = etudiant.user.username
+            data["classe"] = etudiant.classe.id
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        elif request.method == 'PATCH':
+            data = json.loads(request.body)
+            etudiant.user.last_name = data["nom"]
+            etudiant.user.first_name = data["prenom"]
+            etudiant.user.username = data["login"]
+            etudiant.user.email = data["email"]
+            etudiant.classe = Classe.objects.get(id=data["idClasse"])
+            etudiant.user.save()
+            etudiant.save()
+            return HttpResponse(json.dumps({'resultat':True}), content_type="application/json")
+        elif request.method == "DELETE":
+            etudiant.user.delete()
+            etudiant.delete()
+            return HttpResponse(json.dumps({'resultat':True}), content_type="application/json")
+        return HttpResponse(json.dumps({'resultat':False, "message":"Méthode invalide"}), content_type="application/json")
 
 # Renvoie la liste des domaines au format JSON
 def listeDomaines(request):
@@ -422,6 +476,21 @@ def getEpreuve(request, id_epreuve):
         data["testFunc"] = epreuve.testFunc
         data["solution"] = epreuve.solution
         return HttpResponse(json.dumps(data), content_type="application/json")
+
+def setMotDePasse(request, id_etudiant):
+    if request.user.is_authenticated and request.user.is_staff:
+        if request.method == 'POST':
+            data = json.loads(request.body)
+            mdp = data["motdepasse"]
+            etudiant = Etudiant.objects.get(id=id_etudiant)
+            user = etudiant.user
+            user.set_password(mdp)
+            user.save()
+            return HttpResponse(json.dumps({'resultat':True}), content_type="application/json")
+        else:
+            return HttpResponse(json.dumps({'resultat':False, "message":"Méthode invalide"}), content_type="application/json")
+    else:
+        return HttpResponse(json.dumps({'resultat':False, "message":"Vous n'avez pas les droits pour effectuer cette opération"}), content_type="application/json")
 
 def scoreEtudiant(etudiant):
     res = Succes.objects.filter(etudiant=etudiant).aggregate(score=Sum("epreuve__etoiles"))['score']

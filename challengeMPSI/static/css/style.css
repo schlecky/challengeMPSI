@@ -121,6 +121,17 @@ li.domaine{
   background-color:white;
 }
 
+li.domaine:hover{
+  transform:translate(-2px, -2px);
+  box-shadow: 2px 2px 3px #BBB;
+}
+
+li.domaine:active{
+  transform:translate(0,0);
+  box-shadow: none;
+}
+
+
 #description_domaine ul{
   /*! font-size: small; */
   padding-left: 30px;
@@ -777,7 +788,7 @@ div {
   transform:translate(1px, -1px);
 }
 
-.selected{
+#btnsEditeur .selected{
   background:#123445;
 }
 
@@ -995,4 +1006,52 @@ div {
 
 .notification #btnClose{
   float: right;
+}
+
+.btnGestClasse{
+  vertical-align: middle;
+  margin-left:10px;
+  cursor:pointer;
+}
+
+.dialog{
+  position:fixed;
+  display:none;
+  left:0px;
+  top:0px;
+  width:100vw;
+  height:100%;
+  background: #ffffffaa;
+  backdrop-filter: blur(5px);
+  z-index: 999;
+}
+
+.dialogContainer{
+  position: fixed;
+  top: 50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  background:white;
+  padding:30px;
+  padding-top:5px;
+  border:solid 1px gray;
+  box-shadow: 1px 1px 3px;
+}
+
+.dialog .dialogBtns{
+  margin:auto;
+  margin-top:20px;
+  text-align:center;
+}
+
+.dialog .dialogTitre{
+  text-align: center;
+  border-bottom:solid 1px;
+  padding-bottom:5px
+}
+
+#tableEtudiants .btn{
+  height:14px;
+  margin:0px;
+  padding:3px;
 }

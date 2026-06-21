@@ -37,11 +37,13 @@ urlpatterns = [
     path(r'api/classes/', views.listeClasses, name='listeClasses'),
     path(r'api/etudiants/<int:id_classe>/', views.listeEtudiants, name='listeEtudiants'),
     path(r'api/etudiant/<int:id_etudiant>/', views.getEtudiant, name='getEtudiants'),
+    path(r'api/etudiant/<int:id_etudiant>/motdepasse/', views.setMotDePasse, name='setMotDePasse'),
     path(r'api/domaines/', views.listeDomaines, name='listeDomaines'),
     path(r'api/epreuves/<int:id_domaine>/', views.listeEpreuves, name='listeEpreuves'),
     path(r'api/epreuve/<int:id_epreuve>/', views.getEpreuve, name='getEpreuve'),
     path(r'api/images/<int:id_domaine>/', views.getImages, name='getImages'),
     path(r'api/uploadimage/<int:id_domaine>/', views.uploadImage, name='uploadImage'),
+    path(r'api/classe/', views.gestClasse, name='gestClasse'),
 
 
 

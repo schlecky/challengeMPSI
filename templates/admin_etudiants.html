@@ -2,17 +2,375 @@
 
 {% block admin_contenu %} 
 
-<div id="resultatsParams">
+
+{% load static %}
+<script src="{% static 'js/js.cookie.min.js' %}"></script>
+
+<div id="classeParams">
 <span>Sélectionner la classe : </span><select id="classeSelect" onchange="selectionChanged()">
   {% for c in classes %}
-  <option>{{ c.nom }}</option>
+  <option value={{ c.id }}>{{ c.nom }}</option>
   {% endfor %}
-</select>
+
+</select><a onclick="addClasseDialog()"><i class="fa-regular fa-square-plus btnGestClasse" ></i></a><a onclick="remClasseDialog()"><i class="fa-regular fa-square-minus btnGestClasse"></i></a>
 </div>
 
+
+<div>
+  <table class="" id="tableEtudiants">
+    <thead>
+      <tr>
+        <td>Nom</td><td>Prénom</td><td>login</td><td>email</td>
+      </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
+</div>
+<div id=etudiantsBtns>
+  <div class="btn" onclick="ajouteEtudiant()">
+    Ajouter
+  </div>
+  <div class="btn">
+    Importer
+  </div>
+  
+</div>
+
+<div class=notification>
+  <div id="btnClose" onclick="hideNotif()"><i class="fa-regular fa-circle-xmark"></i></div>
+  <div id="message"> 
+  </div>
+</div>
+
+<div id="dialogAddClasse" class="dialog" title="Création d'une classe">
+  <div class=dialogContainer>
+  <div class=dialogTitre>
+    Ajouter une classe
+  </div>
+  <form>
+      <label for="nom">Nom</label>
+      <input type="text" name="nom" id="nomClasse" value="MPSI1 2025-2026"><br/>
+      <label for="password">spe</label>
+      <input type="checkbox" name="chkSpe" id="chkSpe">
+  </form>
+      <div class="dialogBtns">
+        <div class="btn" onclick="dialogAddClasseEnregistrer()">Enregistrer</div>
+        <div class="btn" onclick="dialogAddClasseAnnuler()">Annuler</div>
+      </div>
+</div>
+</div>
+
+
+<div id="dialogChangeMDP" class="dialog" title="Modification du mot de passe">
+  <div class=dialogContainer>
+  <div class=dialogTitre>
+    Définir un mot de passe pour <span id="userMDP"></span>
+  </div>
+  <form>
+      <label for="mdp">Nouveau mot de passe</label>
+      <input type="text" name="mdp" id="mot_de_passe" value=""><br/>
+  </form>
+      <div class="dialogBtns">
+        <div class="btn" onclick="dialogChangeMDPValider()">Valider</div>
+        <div class="btn" onclick="dialogChangeMDPAnnuler()">Annuler</div>
+      </div>
+</div>
+</div>
+
+
+<div id="dialogRemClasse" class="dialog" title="Suppression d'une classe">
+  <div class=dialogContainer>
+  <div class=dialogTitre>
+    Supprimer <span id="nomClasseSuppr"></span> ?
+  </div>
+      <div class="dialogBtns">
+        <div class="btn" onclick="dialogRemClasseOui()">Oui</div>
+        <div class="btn" onclick="dialogRemClasseNon()">Non</div>
+      </div>
+      </div>
+</div>
+
+<div id="dialogEditEtudiant" class="dialog" title="Édition d'un étudiant">
+  <div class=dialogContainer>
+  <div class=dialogTitre>
+    Éditer un étudiant
+  </div>
+  <form>
+      <label for="nom">Nom</label>
+      <input type="text" name="nom" id="nomEtudiant" value=""><br/>
+      <label for="prenom">Prénom</label>
+      <input type="text" name="prenom" id="prenomEtudiant" value=""><br/>
+      <label for="login">Login</label>
+      <input type="text" name="login" id="loginEtudiant" value=""><br/>
+      <label for="email">Email</label>
+      <input type="text" name="email" id="emailEtudiant" value=""><br/>
+      <label for="email">Classe</label>
+      <select id="classeEtudiant">
+        {% for c in classes %}
+        <option value={{ c.id }}>{{ c.nom }}</option>
+        {% endfor %}
+      </select>
+
+      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px"><br/>
+  </form>
+      <div class="dialogBtns">
+        <div class="btn" onclick="dialogEditEtudiantEnregistrer()">Enregistrer</div>
+        <div class="btn" onclick="dialogEditEtudiantAnnuler()">Annuler</div>
+      </div>
+</div>
+</div>
+
+
+<div id="dialogSupprimerEtudiant" class="dialog" title="Suppression d'un étudiant">
+  <div class=dialogContainer>
+  <div class=dialogTitre>
+    Supprimer <span id="nomEtudiantSuppr"></span> ?
+  </div>
+      <div class="dialogBtns">
+        <div class="btn" onclick="dialogSupprimerEtudiantValider()">Oui</div>
+        <div class="btn" onclick="dialogSupprimerEtudiantAnnuler()">Non</div>
+      </div>
+      </div>
+</div>
 <script>
+  let etudiantsAffiches;
+  let etudiantEdite;
+
+  $(document).ready(function(){
+    selectionChanged();
+  })
+
   $("#classeSelect").show();
   $("#lien_etudiants").addClass("selected");
+
+ function dialogAddClasseAnnuler(){
+  $("#dialogAddClasse").hide();
+ }
+ function dialogAddClasseEnregistrer(){
+   $("#dialogAddClasse").hide();
+   data = {
+    "nom":$("#nomClasse").val(),
+    "spe":$("#chkSpe").get()[0].checked
+   }
+   $.ajax({
+     url:"/api/classe/",
+     data:JSON.stringify(data),
+     method:'PUT',
+     headers: {'X-CSRFToken': Cookies.get("csrftoken")},
+   }).done(function(data){
+     if (data['resultat']){
+       showNotif("Sauvegarde réussie");
+       setTimeout(hideNotif,3000); 
+     } else {
+       showNotif("Sauvegarde échouée");
+       setTimeout(hideNotif,3000); 
+     }
+   })
+ }
+
+ function addClasse(){}
+ function addClasseDialog(){
+  $("#dialogAddClasse").show();
+ }
+
+  function dialogRemClasseOui(){
+  $("#dialogRemClasse").hide();
+
+   data = {
+    "id":$("#classeSelect").val(),
+   }
+   $.ajax({
+     url:"/api/classe/",
+     data:JSON.stringify(data),
+     method:'DELETE',
+     headers: {'X-CSRFToken': Cookies.get("csrftoken")},
+   }).done(function(data){
+     if (data['resultat']){
+       showNotif("Suppression réussie");
+       setTimeout(hideNotif,3000); 
+       $("#classeSelect option[value=" + data['id'] + "]").remove() 
+     } else {
+       showNotif("Échec de la suppression");
+       setTimeout(hideNotif,3000); 
+     }
+   })
+  }
+
+  function dialogRemClasseNon(){
+  $("#dialogRemClasse").hide();
+  }
+
+ function remClasseDialog(){
+  $("#dialogRemClasse").show();
+  $("#nomClasseSuppr").html($("#classeSelect").val());
+ }
+
+  function hideNotif(){
+    $(".notification").removeClass("active");
+  }
+  function showNotif(message){
+    $(".notification #message").html(message);
+    $(".notification").addClass("active");
+  }
+  function selectionChanged(){
+    let classe = $("#classeSelect").val();
+   $.ajax({
+     url:"/api/etudiants/"+classe,
+     method:'GET',
+   }).done(function(data){
+      etudiantsAffiches = data;
+      html = ""
+      for(let [i, e] of data.entries()){
+        html += "<tr>"
+        html += "<td>" + e.nom + "</td>"
+        html += "<td>" + e.prenom + "</td>"
+        html += "<td>" + e.username + "</td>"
+        html += "<td>" + e.email + "</td>"
+        html += "<td><a onclick='supprimerEtudiant(" + i + ")' class='btn btnDanger'>Supprimer</a></td>"
+        html += "<td><a onclick='editerEtudiant(" + i + ")' class='btn'>Editer</a></td>"
+        html += "<td><a onclick='changeMDP(" + i + ")' class='btn'>Mot de passe</a></td>"
+        html += "</tr>\n"
+      }
+      $("#tableEtudiants tbody").html(html)
+     $('#classeEtudiant option[value="'+classe+'"]').prop('selected', true);
+   })
+  }
+
+
+
+ function editerEtudiant(iEtudiant){
+  e = etudiantEdite = etudiantsAffiches[iEtudiant];
+  $("#nomEtudiant").val(e.nom);
+  $("#prenomEtudiant").val(e.prenom);
+  $("#emailEtudiant").val(e.email);
+  $("#loginEtudiant").val(e.username);
+  $("#dialogEditEtudiant").show();
+ }
+ function dialogEditEtudiantAnnuler(){
+  $("#dialogEditEtudiant").hide();
+ }
+
+ function ajouteEtudiant(){
+   data = [{
+    "nom" : "Nom",
+    "prenom" : "Prénom",
+    "email" : "nom.prenom@domaine.com",
+    "login" : "nom.prenom",
+    "idClasse" : $("#classeEtudiant").val()
+  }]
+   $.ajax({
+     url:"/api/etudiants/"+$("#classeEtudiant").val()+"/",
+     method:'PUT',
+     headers: {'X-CSRFToken': Cookies.get("csrftoken")},
+     data:JSON.stringify(data),
+   }).done(function(data){
+     if(data["resultat"]){
+       showNotif("Ajout réussie");
+       selectionChanged();
+       setTimeout(hideNotif,3000); 
+     } else {
+       showNotif("Échec de l'ajout");
+       setTimeout(hideNotif,3000); 
+     }
+   })
+
+ }
+  
+
+ function dialogEditEtudiantEnregistrer(){
+  data = {
+    "nom" : $("#nomEtudiant").val(),
+    "prenom" : $("#prenomEtudiant").val(),
+    "email" : $("#emailEtudiant").val(),
+    "login" : $("#loginEtudiant").val(),
+    "idClasse" : $("#classeEtudiant").val()
+  }
+
+   $.ajax({
+     url:"/api/etudiant/"+etudiantEdite.id+"/",
+     method:'PATCH',
+     headers: {'X-CSRFToken': Cookies.get("csrftoken")},
+     data:JSON.stringify(data),
+   }).done(function(data){
+     if(data["resultat"]){
+       showNotif("Modification réussie");
+       selectionChanged();
+       setTimeout(hideNotif,3000); 
+     } else {
+       showNotif("Échec de la modification");
+       setTimeout(hideNotif,3000); 
+     }
+   })
+  $("#dialogEditEtudiant").hide();
+ }
+
+
+ function changeMDP(iEtudiant){
+   e = etudiantEdite = etudiantsAffiches[iEtudiant];
+   $("#dialogChangeMDP #userMDP").text(e['username']);
+   $("#mot_de_passe").val("")
+   $("#dialogChangeMDP").show();
+ }
+
+ function dialogChangeMDPAnnuler(){
+   $("#dialogChangeMDP").hide();
+ }
+
+ function dialogChangeMDPValider(){
+   let mdp = $("#mot_de_passe").val();
+   data = {
+    "motdepasse":mdp
+   }
+   $.ajax({
+     url:"/api/etudiant/"+etudiantEdite.id+"/motdepasse/",
+     method:'POST',
+     headers: {'X-CSRFToken': Cookies.get("csrftoken")},
+     data:JSON.stringify(data),
+   }).done(function(data){
+     if(data["resultat"]){
+       showNotif("Modification réussie");
+       selectionChanged();
+       setTimeout(hideNotif,3000); 
+     } else {
+       showNotif("Échec de la modification");
+       setTimeout(hideNotif,3000); 
+     }
+   })
+   $("#dialogChangeMDP").hide();
+ }
+
+
+ function supprimerEtudiant(iEtudiant){
+   e = etudiantEdite = etudiantsAffiches[iEtudiant];
+   $("#dialogSupprimerEtudiant #nomEtudiantSuppr").text(e['username']);
+   $("#dialogSupprimerEtudiant").show();
+ }
+
+ function dialogSupprimerEtudiantAnnuler(){
+   $("#dialogSupprimerEtudiant").hide();
+ }
+
+ function dialogSupprimerEtudiantValider(){
+   let idEtudiant = etudiantEdite.id;
+   $.ajax({
+     url:"/api/etudiant/"+etudiantEdite.id+"/",
+     method:'DELETE',
+     headers: {'X-CSRFToken': Cookies.get("csrftoken")},
+   }).done(function(data){
+     if(data["resultat"]){
+       showNotif("Suppression réussie");
+       selectionChanged();
+       setTimeout(hideNotif,3000); 
+     } else {
+       showNotif("Échec de la modification");
+       setTimeout(hideNotif,3000); 
+     }
+   })
+   $("#dialogSupprimerEtudiant").hide();
+ }
 </script>
 
 {% endblock %} <!-- contenu -->

@@ -1,4 +1,4 @@
-INSTALL_DIR := ~/travail/mpsi/challengeMPSI/challengeMPSI/static/img/electromagnetisme/
+INSTALL_DIR := ~/travail/mpsi/web/challengeMPSI/challengeMPSI/static/img/electromagnetisme/
 PDF_FILES := $(wildcard *.pdf)
 PNG_FILES := $(patsubst %.pdf, %.png, $(PDF_FILES))
 INSTALLED_PNG_FILES = $(addprefix $(INSTALL_DIR),$(PNG_FILES))
