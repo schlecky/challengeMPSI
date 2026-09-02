@@ -399,7 +399,8 @@ def listeEtudiants(request, id_classe):
                     user = User.objects.create(first_name=d["prenom"], last_name=d["nom"], username=d["login"]+str(num), email=d['email'])
                 else:
                     user = User.objects.create(first_name=d["prenom"], last_name=d["nom"], username=d["login"], email=d['email'])
-                user.set_password(d['mdp'])
+                if "mdp" in d:
+                    user.set_password(d['mdp'])
                 user.save()
                 etudiant = Etudiant.objects.create(user=user, classe=Classe.objects.get(id=d['idClasse']))
                 etudiant.save()
