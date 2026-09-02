@@ -5,6 +5,7 @@
 
 {% load static %}
 <script src="{% static 'js/js.cookie.min.js' %}"></script>
+<script src="{% static 'js/jquery.csv.min.js' %}"></script>
 
 <div id="classeParams">
 <span>Sélectionner la classe : </span><select id="classeSelect" onchange="selectionChanged()">
@@ -32,7 +33,7 @@
   <div class="btn" onclick="ajouteEtudiant()">
     Ajouter
   </div>
-  <div class="btn">
+  <div class="btn" onclick="importData()">
     Importer
   </div>
   
@@ -138,6 +139,7 @@
 <script>
   let etudiantsAffiches;
   let etudiantEdite;
+  let classe;
 
   $(document).ready(function(){
     selectionChanged();
@@ -216,7 +218,7 @@
     $(".notification").addClass("active");
   }
   function selectionChanged(){
-    let classe = $("#classeSelect").val();
+    classe = $("#classeSelect").val();
    $.ajax({
      url:"/api/etudiants/"+classe,
      method:'GET',
@@ -371,6 +373,57 @@
    })
    $("#dialogSupprimerEtudiant").hide();
  }
+
+
+  function importData() {
+    let input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = _ => {
+      // you can use this method to get file and perform respective operations
+      let files =   Array.from(input.files);
+      readDataFile(files[0]);
+    };
+    input.click();
+  }
+
+
+  function readDataFile(file) {
+    result = {};
+    const reader = new FileReader();
+    reader.addEventListener('load', fileLoaded);
+    reader.readAsText(file);
+  }
+
+  function fileLoaded(event){
+    let csv = event.target.result;
+    let arrays = $.csv.toArrays(csv, {"separator":";"});
+    data = arrays.map(function(e){
+      return {
+        "nom":e[0],
+        "prenom":e[1],
+        "email":e[4],
+        "login":e[2],
+        "mdp":e[3],
+        "idClasse":classe
+      }
+    });
+   $.ajax({
+     url:"/api/etudiants/"+classe+"/",
+     method:'PUT',
+     headers: {'X-CSRFToken': Cookies.get("csrftoken")},
+     data:JSON.stringify(data),
+   }).done(function(data){
+     if(data["resultat"]){
+       showNotif("Importation réussie");
+       selectionChanged();
+       setTimeout(hideNotif,3000); 
+     } else {
+       showNotif("Échec de l'importation");
+       setTimeout(hideNotif,3000); 
+     }
+   })
+  }
+
 </script>
 
 {% endblock %} <!-- contenu -->

@@ -15,6 +15,7 @@ import datetime as dt
 import time
 import json
 import base64
+import string
 
 def accueilView(request):
     if request.user.is_authenticated:
@@ -391,7 +392,11 @@ def listeEtudiants(request, id_classe):
         elif request.method == 'PUT':
             dataList = json.loads(request.body)
             for d in dataList:
-                user = User.objects.create(first_name=d["prenom"], last_name=d["nom"], username=d['login'], email=d['email'])
+                if User.objects.filter(username=d["login"]):
+                    num = 1
+                    while User.objects.filter(username=d["login"]+str(num)):
+                        num += 1
+                user = User.objects.create(first_name=d["prenom"], last_name=d["nom"], username=d["login"]+str(num), email=d['email'])
                 user.save()
                 etudiant = Etudiant.objects.create(user=user, classe=Classe.objects.get(id=d['idClasse']))
                 etudiant.save()
@@ -405,7 +410,6 @@ def getEtudiant(request, id_etudiant):
         etudiant = Etudiant.objects.get(id=id_etudiant)
         if etudiant is None:
             return HttpResponse(json.dumps({'resultat':False, 'message':'Etudiant inconnu'}), content_type="application/json")
-
         if request.method == 'GET':
             data = {}
             data["id"] = etudiant.id
