@@ -396,7 +396,9 @@ def listeEtudiants(request, id_classe):
                     num = 1
                     while User.objects.filter(username=d["login"]+str(num)):
                         num += 1
-                user = User.objects.create(first_name=d["prenom"], last_name=d["nom"], username=d["login"]+str(num), email=d['email'])
+                    user = User.objects.create(first_name=d["prenom"], last_name=d["nom"], username=d["login"]+str(num), email=d['email'])
+                else:
+                    user = User.objects.create(first_name=d["prenom"], last_name=d["nom"], username=d["login"], email=d['email'])
                 user.save()
                 etudiant = Etudiant.objects.create(user=user, classe=Classe.objects.get(id=d['idClasse']))
                 etudiant.save()
