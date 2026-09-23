@@ -13,9 +13,8 @@
 <body>
 <script>
 MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']]
-  }
+  tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+  loader: {load: ['[tex]/cases', '[tex]/empheq']},
 };
 classement = false;
 function toggle_classement(){
